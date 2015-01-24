@@ -1,0 +1,216 @@
+---
+output:
+  html_document:
+    highlight: textmate
+    theme: default
+    toc: no
+  pdf_document:
+    highlight: default
+  word_document: default
+---
+
+<!---
+Author: Lucas Tate <lucas.tate@pnnl.gov>
+Created: Sept 30, 2014
+Last Updated: Oct 07, 2014
+-->
+
+#calcIVT
+##calcIVT
+
+###Description
+
+The `calcIVT` package is intended to provide functions useful in calculating Intermediate Value Tables (IVTs) from a dataset. 
+
+This package was created in an effort to analyze flight data in order to better identify abnormalities as they arise in the data. Because a typical flight is composed of several very different phases, this package allows allows for the data to be subsetted by discrete phases so that abnormalities can be identified at specific phases of the flight rather than trying to treat the data as a single continuous entity. Data lacking these discrete phases can still be handled using the package by simply setting the discrete phases to 1.
+
+###Getting Started
+
+This guide is structured with the assumption that you are beginning with a basic understanding of R, and aims to provide an understandable blueprint for implementing the `calcIVT` functionality within your own data.
+
+The first thing you will need to do is install the `calcIVT` package. You will need access to the [martingale repository](http://martingale.pnl.gov/computing/repos/) in order to obtain the package. After permissions for access have been granted, the package can then be installed by:
+
+```{r eval=FALSE}
+install.packages("calcIVT", repos="http://martingale.pnl.gov/computing/repos")
+```
+
+Once the package has been installed, the library can be loaded so that the functions can be used. A complete list of the functions contained within the `calcIVT` package can be seen using:
+
+```{r message=FALSE, echo=FALSE}
+library(calcIVT)
+options(scipen=999)
+```
+```{r eval=FALSE}
+library(calcIVT)
+help(package=calcIVT)
+```
+
+
+###Package Structure
+The graphic below provides a heirarchical depiction of how the functions contained within the `calcIVT` package are related.
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+library(calcIVT)
+library(mvbutils)
+
+set.seed(9)
+
+foodweb(where="package:calcIVT",
+        border="#00CCFF", boxcolor = "#E6FAFF",
+        expand.xbox=1.2, expand.ybox=3,
+        textcolor="black", cex=1, lwd=1)
+```
+
+###continuousIVT() Example
+The `continuousIVT()` function is intended to calculate IVTs for multiple continuous variables. These IVTs are important because they can be used in conjunction with several analysis methods as a means to identify anomalies within the data. Let's look at an example.
+
+Suppose you have a set of dataset that contains measurements of the continuous variables speed, altitude, and the tail rudder angle of a particular flight. These measurements are take once per second and associated with the corresponding phase of the flight; in this case the phases are take-off, flight, and landing. We will create our fake dataset as follows:
+
+```{r message=FALSE}
+#Flight Variables#
+
+# vector containing speed at each second of the flight
+speed <- c(rnorm(600,60,5),rnorm(6000,300,10),rnorm(1800,60,5)) 
+
+# vector containing altitutde at each second of the flight
+altitude <- c(rep(10,600),rnorm(6000,20000,1000),rep(10,1800)) 
+
+# vector containing tail rudder angle of the plane at each second of the flight
+trAngle <- rnorm(8400,0,20) 
+
+# integer vector identifying phase at each second of the flight 
+#(1 = Take off, 2 = Flight, 3 = Landing)
+phase.vec <- c(rep(1,600),rep(2,6000),rep(3,1800)) 
+```
+
+Now we can define some of the function parameters that we will need in order to use the `continuousIVT()` function.
+
+```{r message=FALSE}
+#Function Parameters
+
+# vector with names of flight variables
+cNames <- c("speed","altitude","trAngle") 
+
+# vector identifying unique phases of the flight
+phases.to.process <- c(1,2,3) 
+
+# Define number of seconds in the flight
+seconds <- 8400 
+```
+
+Remember that you can see a list of arguments required for the `continuousIVT()` function using:
+```{r eval=FALSE}
+?continuousIVT
+```
+
+It should be noted that there are additional arguments `nominal.skip`, `nominal.bw`, and `actual.min.max` however these arguments have default values so we are going to leave them alone. Additional information on these can be found within the help document.
+
+
+Now we can use the `continuousIVT()` function to obtain the IVTs for each of the continuous variables.
+
+```{r eval=FALSE}
+cResultIVT <-continuousIVT(cNames, phase.vec, phases.to.process, seconds)
+cResultIVT
+```
+```{r echo=FALSE}
+cResultIVT <-continuousIVT(cNames, phase.vec, phases.to.process, seconds)
+cResultIVT <- round(cResultIVT,0)
+cResultIVT
+```
+
+You may notice that the output shown above is slightly different than your own. I rounded the values and removed the scientific notation to hopefully make the results more readable. If you look at the rownames you can see that they are named systematically and in the following form:
+
+**p.[phase].[coefficient].[intermediate value]**
+
+* __[phase]__ Designates the phase of the flight
+    * 1 - Take off
+    * 2 - Flight
+    * 3 - Landing
+* __[coefficient]__ Designates the average of the coefficients from the quadratic line fits in all of the defined windows for the indicated phase
+    * a - intercept
+    * b - slope
+    * c - acceleration
+    * d - error term
+* __[intermediate value]__ Defines the specific Intermediate Value for the indicated coefficient and phase
+    * total - sum of the RMSE's (root mean squared error) of the regression fits for the given phase
+    * ss - sum of squares of the coeffcient for the given phase
+    * min - minimum value if actual.min.max is TRUE, otherwise minimum coefficient
+    * max - maximum value if actual.min.max is TRUE, otherwise maximum coefficient
+* __Additionally...__
+    * n.count rows denote the duration of the phase in seconds
+    * start.value rows denote the first data point in the phase
+    * end.value rows denote the last data point in the phase
+
+###discreteIVT() Example
+
+The `discreteIVT()` function is intended to calculate the percentage of time in each state of a discrete variable as well as the number and nature of transitions between states. This information is summarized by phase and can handle multiple discrete variables. Let's take a look at an example.
+
+We will continue with the flight theme and create a dataset containing a set of discrete variables collected each second for the duration of the flight.
+```{r message=FALSE}
+#Flight Variables
+
+# vector containing discrete state of forward thrust (On=1 Off=0)
+fwdThrust <- c(rep(0,300),rep(1,6300),rep(0,60),rep(1,1740))  
+
+# vector containing discrete state of forward thrust (On=1 Off=0)
+rvseThrust <- c(rep(0,6600),rep(1,60),rep(0,1740))
+
+# vector containing discrete state of landing gear (Down=1 Up=0)
+lgearDown <- c(rep(1,720),rep(0,5760),rep(1,1920))
+
+# vector containing discrete state of direction (N=1 E=2 S=3 W=4)
+direction <- c(rep(1,2000),rep(2,5000),rep(3,1400))
+
+# integer vector identifying phase at each second of the flight
+phase.vec <- c(rep(1,600),rep(2,6000),rep(3,1800)) 
+```
+
+Now we can define some of the function parameters that we will need in order to use the `discreteIVT()` function.
+
+```{r message=FALSE}
+#Function Parameters
+
+# vector with names of flight variables
+dNames <- c("fwdThrust","rvseThrust","lgearDown","direction") 
+
+# vector identifying unique phases of the flight
+phases.to.process <- c(1,2,3) 
+
+# Define number of seconds in the flight
+seconds <- 8400 
+```
+
+Remember that you can see a list of arguments required for the `discreteIVT()` function using:
+```{r eval=FALSE}
+?discreteIVT
+```
+
+Now that we have our data we can use the `discreteIVT()` function to get a summary of the discrete states and transitions over each phase of the data.
+
+```{r eval=FALSE}
+dResult <- discreteIVT(dNames, phase.vec, phases.to.process, seconds)
+dResult
+```
+
+```{r echo=FALSE}
+dResult <- round(t(discreteIVT(dNames, phase.vec, phases.to.process, seconds)),2)
+dResult
+```
+
+The output shown will be slightly different than yours because I rounded the values and transposed the matrix in order to facilitate better readability for the sake of this guide. As you can see there is a clear structure in the row names (column names in your case) which is described below:
+
+**[variable].[frequency].[from].[to]**
+
+* __[variable]__ Designates the discrete variable of interest from the data
+    * fwdThrust
+    * rvseThrust
+    * lgearDown
+    * direction
+* __[frequency]__ Either a duration or count summarizing discrete states
+    * percent - displays the percent of time during a phase the discrete state did not change
+    * transition - records a count of each type of unique discrete state transitions as specified by the from and to components for each phase.
+* __[from]__ Key indicating the discrete state of the variable before
+    * XX - Number ranging over all possible discrete states of the variable of interest defined
+* __[to]__ Key indicating the discrete state of the variable after
+    * XX - Number ranging over all possible discrete states of the variable of interest defined
+    

@@ -1,0 +1,11 @@
+Package: calcIVT
+Title: Functions for calculating Intermediate Value Tables (IVTs)
+Version: 0.1.0
+Author: Landon Sego, based on code written by Brett Amidan
+Description: Enhanced ('optimized') calculation of IVTs
+Maintainer: Landon Sego <Landon.Sego@pnl.gov>
+Imports:
+    stats,
+    Smisc
+License: LICENSE
+Packaged: 

@@ -3,7 +3,6 @@
 
 # Landon Sego, January 30, 2008
 
-
 ##' Summarizes the type and location of transitions between discrete states in
 ##' an integer vector
 ##' 
@@ -17,18 +16,25 @@
 ##' transition labels that indicate which value of \code{m(Y)} corresponds to
 ##' each of the possible transitions among the unique states of \code{y}.
 ##'
-##' @export 
+##' @export
+##' 
 ##' @param y The integer vector whose state transitions will be identified
+##' 
 ##' @param y.unique An integer vector containing the unique values of \code{y}
+##' 
 ##' @return A list with the following components: (also see example below)
 ##' \item{diffMap}{The first differences of \code{m(y)} which identify the
 ##' position and type of state transition in \code{y}} \item{from}{The 'from'
 ##' state labels} \item{to}{The 'to' state labels} \item{transValue}{The value
 ##' that \code{diffMap} will take when \code{y} transitions from the state
 ##' label in \code{from} to the corresponding state label in \code{to}}
+##' 
 ##' @author Landon Sego
-##' @seealso This function is called in \code{\link{discreteTransition}}
+##' 
+##' @seealso This function is called in \code{\link{discFeatures}}
+##' 
 ##' @keywords misc
+##' 
 ##' @examples
 ##' 
 ##' transMap(c(1,1,1,2,2,1,1,3,3,2,2), 1:3)

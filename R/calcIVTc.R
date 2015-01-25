@@ -39,6 +39,7 @@
 ##' \code{\link{calcIVTslow}}
 ##' @keywords misc
 
+
 calcIVTc <- function(y, phase.vec, x1, min.window=5, start=1, skip=1, actual.min.max=TRUE, linear.only=FALSE) {
 
   # Sanity checks

@@ -6,7 +6,6 @@
 
 # Added the 'linear.only' argument, Landon Sego, Dec 19, 2009
 
-
 ##' Fits a moving window quadratic (or simple linear) regression model
 ##' 
 ##' Fits a moving quadratic (or simple linear) regression model over a series
@@ -18,7 +17,7 @@
 ##' 
 ##' \code{y = a + b*x1 + c*x1^2 + e}
 ##' 
-##' if \code{linear.only=FALSE}, or, if \code{linear.only=TRUE}, fits
+##' if \code{linear.only = FALSE}, or, if \code{linear.only = TRUE}, fits
 ##' 
 ##' \code{y = a + b*x1 + e}
 ##' 
@@ -33,30 +32,61 @@
 ##' The handling of the moving windows and missing values in this function is
 ##' very similar to \code{\link[Smisc]{smartFilter}} in \pkg{Smisc}.
 ##'
-##' @export 
+##' @export
+##' 
 ##' @param y A numeric vector
-##' @param x1 The linear predictor of a the regression model, whose length must
-##' be odd, and it must be monotonic (increasing or decreasing).
+##' 
+##' @param x1 The predictor of the regression model, whose length must
+##' be odd, and it must be monotonic (increasing or decreasing).  Typically this
+##' would be an evenly spaced, increasing vector.
+##' 
 ##' @param min.window The minimum number of non-missing data points in a window
 ##' that are required to fit the regression model.
+##' 
 ##' @param start The index of the center of the first window
+##' 
 ##' @param skip The number of indexes to advance the center of the moving
 ##' window each time the model is fit.
+##' 
 ##' @param linear.only \code{=TRUE} fits a simple linear regression model with
 ##' \code{x1} as the single predictor, instead of a quadratic regression model.
-##' @return A list with the 4 component vectors that contain the results of the
+##' 
+##' @return An object of class \code{fitQ}, which is list with
+##' the 4 component vectors that contain the results of the
 ##' quadratic model fits.  \item{a}{The estimated intercepts} \item{b}{The
 ##' estimated linear coefficients} \item{c}{The estimated quadratic
-##' coefficients.  These are \code{NA} is \code{linear.only=TRUE}} \item{d}{The
+##' coefficients.  These are \code{NA} is \code{linear.only = TRUE}} \item{d}{The
 ##' root mean squared error (RMSE)}
+##' 
 ##' @author Landon Sego
-##' @seealso \code{\link{calcIVTc}}
-##' @keywords misc
+##' 
+##' @examples
+##'# Calculate the rolling window quadratic fit
+##'y <- fitQ(rnorm(25), -3:3)
+##'y
+##'summary(y)
+##'
+##'# Define our own summary stats
+##'summary(y, stats = c("count", "mean", "kurt"))
 
-fitQ <- function(y, x1, min.window=5, start=1, skip=1, linear.only=FALSE) {
+fitQ <- function(y,
+                 x1 = -10:10,
+                 min.window = 5,
+                 start = 1,
+                 skip = 1,
+                 linear.only = FALSE) {
 
   n <- length(y)
 
+  # Basic checks
+  stopifnot(is.numeric(y),
+            is.numeric(x1),
+            is.numeric(min.window),
+            length(min.window) == 1,
+            is.numeric(skip),
+            length(skip) == 1,
+            is.logical(linear.only))
+    
   # Define the window bandwith (in terms of the number of data points)
   bw <- length(x1) %/% 2
 
@@ -65,8 +95,10 @@ fitQ <- function(y, x1, min.window=5, start=1, skip=1, linear.only=FALSE) {
     stop("x1 has one or more missing values\n")
   if (!(length(x1) %% 2))
     stop("Length of x1 must be odd\n")
+  
   # x1 should be monotonic
   dx1 <- diff(x1)
+  
   if (!(all(dx1 > 0) | all(dx1 < 0)))
     stop("x1 is not monotonic\n")
   if (start > n)
@@ -140,11 +172,49 @@ fitQ <- function(y, x1, min.window=5, start=1, skip=1, linear.only=FALSE) {
                d = double(num.windows),
                NAOK = TRUE)[c("a", "b", "d")]
 
-    out <- list(a=out1$a, b=out1$b, c=rep(NA, num.windows), d=out1$d)
+    out <- list(a = out1$a, b = out1$b, c = rep(NA, num.windows), d = out1$d)
  
   }
 
+  # Give it a class
+  class(out) <- c("fitQ", class(out))
   
   return(out)
   
 } # fitQ
+
+##' @method summary fitQ
+##'
+##' @describeIn fitQ Calculates summary statistics for a \code{fitQ} object, returning a
+##' named vector with summary statistics.  The names take the form [coefficient].[stat],
+##' where the coefficient is one of "a", "b", "c", or "d", and the stat is the statistic
+##' required in the \code{stats} argument of the \code{summary} method.
+##' 
+##' @param stats A character vector of summary statistics that are valid for
+##' \code{\link{summaryStats}}. Alternatively, the object returned by
+##' \code{\link{summaryStats}} may also be supplied for this argument.
+##'
+##' @param vname character string giving a prefix for the name labels
+##' 
+##' @export
+
+# Summary method for fitQ
+summary.fitQ <- function(fitQ_object,
+                         stats = c("min", "q1", "mean", "med", "q3",
+                                   "max", "sd", "count"),
+                         vname = "V") {
+
+  # Create the summary stat function, unless it has been passed in
+  if (!is.function(stats)) {
+    stats <- summaryStats(stats)
+  }
+
+  # Calculate the summary statistics
+  out <- unlist(lapply(fitQ_object, stats))
+
+  # Append the prefix
+  names(out) <- paste(vname, names(out), sep = ".")
+
+  return(out)
+
+} # summary.fitQ

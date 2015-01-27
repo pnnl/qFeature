@@ -32,7 +32,8 @@
 ##' @param fitQargs Named list of arguments for \code{\link{fitQ}}.  If \code{NULL}, the default arguments of
 ##' \code{\link{fitQ}} are used.
 ##'
-##' @param \dots Additional arguments to \code{\link[plyr:ddply]{plyr::ddply}}.
+##' @param nJobs The number of jobs to run when extracting the features.  Uses the \code{.parallel} argument of
+##' \code{\link[plyr:ddply]{plyr::ddply}}, which in turn relies on \code{\link[foreach:foreach]{foreach::foreach}}.
 ##'
 ##' @return A dataframe with one row for each grouping defined by \code{.variables}.  The features computed by
 ##' \code{\link{getFeatures}} is presented across the columns.
@@ -54,17 +55,64 @@
 
 qFeature <- function(y, .variables, cont = NULL, disc = NULL, 
                      stats = c("min", "q1", "mean", "med", "q3", "max", "sd", "count"),
-                     fitQargs = NULL,
-                     ...) {
-
+                     fitQargs = NULL, nJobs = 1) {
+    
   # Basic sanity checks.  Other arguments are checked in more detail by getFeatures()
+  stopifnot(is.numeric(nJobs),
+            nJobs %% 1 == 0,
+            nJobs >= 1)
+    
   vars <- checkInputs(colnames(y), cont, disc)
   cont <- vars$cont
   disc <- vars$disc
 
-  o <- plyr::ddply(y, .variables, getFeatures, cont = cont, disc = disc, stats = stats, fitQargs = fitQargs, ...)
+  if (nJobs > 1) {
+
+    # Set up the cluster  
+    cl <- parallel::makeCluster(nJobs)
+    parallel::clusterEvalQ(cl, library(qFeature))
+    doParallel::registerDoParallel(cl)
+
+    # The warning supression is needed due to an outstanding issue with plyr
+    # that only occurs when the function is called in parallel.
+    # See https://github.com/hadley/plyr/issues/203
+    o <- suppressWarnings(plyr::ddply(y, .variables, getFeatures, cont = cont, disc = disc, stats = stats,
+                                      fitQargs = fitQargs, .parallel = TRUE))
+
+    # suppressWarnings() works too well for this particular warning.  The warning vanishes and is not recoverable
+    # via warnings().  TRY code in demo(error.catching)
+    
+    # These are the warnings that are issued
+    w <- c("<anonymous>: ... may be used in an incorrect context: '.fun(piece, ...)'\n")
+
+    # Capture the warnings
+    sWarn <- warnings()
+
+
+    
+    # Now remove the goofy warnings
+    if (!is.null(sWarn)) {
+        
+      sWarn <- sWarn[-which(names(sWarn) == w)]
+
+      # If we still have warnings, then print them
+      if (!is.null(sWarn)) {
+        print(sWarn)
+      }
+          
+    }
+
+    # Shut down the cluster
+    parallel::stopCluster(cl)
+
+  } # If we're processing in parallel
+
+  else {
+
+    o <- plyr::ddply(y, .variables, getFeatures, cont = cont, disc = disc, stats = stats, fitQargs = fitQargs)
+      
+  }
 
   return(o)
-  
   
 } # qFeature

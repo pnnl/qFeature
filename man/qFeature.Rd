@@ -4,7 +4,7 @@
 \title{Compute the quadratic, linear, and/or discrete features of multiple variables for a single group}
 \usage{
 qFeature(y, .variables, cont = NULL, disc = NULL, stats = c("min", "q1",
-  "mean", "med", "q3", "max", "sd", "count"), fitQargs = NULL, ...)
+  "mean", "med", "q3", "max", "sd", "count"), fitQargs = NULL, nJobs = 1)
 }
 \arguments{
 \item{.variables}{variables (i.e. columns) in \code{y} to split data frame by, input as 'as.quoted' variables.
@@ -28,11 +28,12 @@ which are passed to \code{\link{summaryStats}}.  Or the function object returned
 \item{fitQargs}{Named list of arguments for \code{\link{fitQ}}.  If \code{NULL}, the default arguments of
 \code{\link{fitQ}} are used.}
 
+\item{nJobs}{The number of jobs to run when extracting the features.  Uses the \code{.parallel} argument of
+\code{\link[plyr:ddply]{plyr::ddply}}, which in turn relies on \code{\link[foreach:foreach]{foreach::foreach}}.}
+
 \item{x}{Data frame, each row containing a vector of measurements for a particular point in time, with
 columns indicating the measured variables (and possibly other descriptive variables).  The
 data processed presuming the rows are orderd chronologically.}
-
-\item{\dots}{Additional arguments to \code{\link[plyr:ddply]{plyr::ddply}}.}
 }
 \value{
 A dataframe with one row for each grouping defined by \code{.variables}.  The features computed by
@@ -44,6 +45,19 @@ This is a wrapper that implements \code{\link{getFeatures}} for each group in a 
 }
 \details{
 A least one of \code{cont} or \code{disc} must be specified.
+}
+\examples{
+# Load the data
+data(demoData)
+str(demoData)
+
+# Calculate features for each subset
+f <- qFeature(demoData, c("subject", "phase"),
+             cont = 3:4, disc = 8:11, stats = c("mean", "sd"),
+             fitQargs = list(x1 = -5:5))
+
+str(f)
+head(f)
 }
 \author{
 Landon Sego

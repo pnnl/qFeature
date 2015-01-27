@@ -11,7 +11,8 @@ Imports:
     Smisc,
     plyr,
     moments,
-    foreach,
+    doParallel,
+    parallel,
     stats
 License: LICENSE
 Packaged: 

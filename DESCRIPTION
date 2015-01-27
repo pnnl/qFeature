@@ -9,7 +9,9 @@ Description: Extract features from time series using moving windows of
 Maintainer: Landon Sego <Landon.Sego@pnl.gov>
 Imports:
     Smisc,
+    plyr,
     moments,
+    foreach,
     stats
 License: LICENSE
 Packaged: 

@@ -3,12 +3,10 @@
 \alias{discFeatures}
 \title{Summarizes the transitions between discrete states by phase}
 \usage{
-discFeatures(y, vname = "V")
+discFeatures(y)
 }
 \arguments{
 \item{y}{A vector with discrete states}
-
-\item{vname}{character string giving a prefix for the name labels}
 }
 \value{
 A named vector with the fraction of time spent in each state, and the
@@ -20,11 +18,11 @@ between states
 }
 \examples{
 x <- c("a","a","a","b","b","a","a","c","c","b","b")
-discFeatures(x, vname = "Test")
+discFeatures(x)
 
-discFeatures(c(T, F, F, T, F, F, F), vname = "switch")
+discFeatures(c(T, F, F, T, F, F, F))
 
-discFeatures(c(1, 1, 1, 2, 2), vname = "simple")
+discFeatures(c(1, 1, 1, 2, 2))
 
 discFeatures(c(rep(pi, 3), rep(exp(1), 3), rep(sqrt(2), 3)))
 }

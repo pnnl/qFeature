@@ -17,8 +17,6 @@
 ##' 
 ##' @param y A vector with discrete states
 ##' 
-##' @param vname character string giving a prefix for the name labels
-##' 
 ##' @return A named vector with the fraction of time spent in each state, and the
 ##' number of transitions from one state to another
 ##' 
@@ -28,15 +26,15 @@
 ##' 
 ##' @examples
 ##' x <- c("a","a","a","b","b","a","a","c","c","b","b")
-##' discFeatures(x, vname = "Test")
+##' discFeatures(x)
 ##'
-##' discFeatures(c(T, F, F, T, F, F, F), vname = "switch")
+##' discFeatures(c(T, F, F, T, F, F, F))
 ##'
-##' discFeatures(c(1, 1, 1, 2, 2), vname = "simple")
+##' discFeatures(c(1, 1, 1, 2, 2))
 ##'
 ##' discFeatures(c(rep(pi, 3), rep(exp(1), 3), rep(sqrt(2), 3)))
 
-discFeatures <- function(y, vname = "V") {
+discFeatures <- function(y) {
 
   # Convert the vector to a factor
   if (!is.factor(y)) {
@@ -59,7 +57,7 @@ discFeatures <- function(y, vname = "V") {
   # Special case of nStates = 1
   if (nStates == 1) {
     out <- 1
-    names(out) <- paste(vname, "percent", ly, sep = ".")
+    names(out) <- paste("percent", ly, sep = ".")
     return(out)
   }
 
@@ -86,13 +84,13 @@ discFeatures <- function(y, vname = "V") {
   tmap$to <- factor(tmap[["to"]], levels = y.codes.unique, labels = ly)
   
   # Create the labels for transitions between two different states
-  trans.state.labels <- paste(vname, "num_trans",
+  trans.state.labels <- paste("num_trans",
                               paste(tmap[["from"]], tmap[["to"]], sep="_"),
                               sep = ".")
 
   # Create The labels for transitions within the same state
   # (which are summarized as a percentage)
-  non.trans.state.labels <- paste(vname, "percent", ly, sep = ".")
+  non.trans.state.labels <- paste("percent", ly, sep = ".")
 
   # Summary functions that will be applied in the loop below
   trans.summary <- function(x) {

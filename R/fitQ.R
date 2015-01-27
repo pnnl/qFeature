@@ -194,15 +194,12 @@ fitQ <- function(y,
 ##' \code{\link{summaryStats}}. Alternatively, the object returned by
 ##' \code{\link{summaryStats}} may also be supplied for this argument.
 ##'
-##' @param vname character string giving a prefix for the name labels
-##' 
 ##' @export
 
 # Summary method for fitQ
 summary.fitQ <- function(fitQ_object,
                          stats = c("min", "q1", "mean", "med", "q3",
-                                   "max", "sd", "count"),
-                         vname = "V") {
+                                   "max", "sd", "count")) {
 
   # Create the summary stat function, unless it has been passed in
   if (!is.function(stats)) {
@@ -211,9 +208,6 @@ summary.fitQ <- function(fitQ_object,
 
   # Calculate the summary statistics
   out <- unlist(lapply(fitQ_object, stats))
-
-  # Append the prefix
-  names(out) <- paste(vname, names(out), sep = ".")
 
   return(out)
 

@@ -14,14 +14,16 @@ demoData <- function() {
                     phase = inVec[["phase"]],
                     contA = rnorm(n, mean = scaleFactor * 10, sd = scaleFactor * 2),
                     contB = log(pmax(1,
-                    rnorm(n, mean = c(1:(n %/% 2), seq((n %/% 2 + 1), 1, by = -1)) ^ scaleFactor + 10,
+                            rnorm(n, mean = c(1:(n %/% 2), seq((n %/% 2 + 1), 1, by = -1)) ^ scaleFactor + 10,
                             sd = scaleFactor * 10))),
                     contC = rgamma(n, shape = 2, scale = scaleFactor),
                     contD = (1:n) ^ 2 * rpois(n, lambda = scaleFactor / 10),
                     contE = rbeta(n, 0.5, 0.5) * scaleFactor,
                     discA = sample(rep_len(1:4, n)),
-                    discB = rbinom(n, 1, runif(1, 0.3, 0.7)),
-                    discC = sample(rep_len(letters[1:3], n)))
+                    discB = as.logical(rbinom(n, 1, runif(1, 0.3, 0.7))),
+                    discC = as.factor(sample(rep_len(letters[1:3], n))),
+                    discD = sample(rep_len(letters[1:3], n)),
+                    stringsAsFactors = FALSE)
    
     return(d)
   
@@ -44,7 +46,7 @@ demoData <- function() {
       
   }
 
-  # Combine them all together
+  # Row bind them all together at once
   return(Smisc::qbind(paste("d", 1:nrow(ds), sep = "")))
 
 } # demoData

@@ -1,24 +1,32 @@
-##' Fits the moving window regression model and summarizes results by phases
+##' Compute the quadratic, linear, and/or discrete features of multiple variables for a single group
 ##' 
-##' Fits the moving window regression model over a single vector of data and
-##' summarizes results by phases
-##'
+##' Fits the moving window quadratic (or linear) regression model for each continuous variable in a data frame,
+##' and calculates summary statistics of the parameters.  Also calculates the duration and transition features of
+##' discrete variables.
+##' 
 ##' A least one of \code{cont} or \code{disc} must be specified.
 ##' 
 ##' @export
 ##' 
-##' @param x Data frame
+##' @param x Data frame, each row containing a vector of measurements for a particular point in time, with
+##' columns indicating the measured variables (and possibly other descriptive variables).  The
+##' data processed presuming the rows are orderd chronologically.
 ##' 
-##' @param cont Vector of integers or character vector indicating the columns
-##' of \code{x} that correspond to variables that will be treated as continuous
+##' @param cont Vector of integers or a character vector indicating the columns
+##' of \code{x} that correspond to continuous variables.  These are the variables from which features will
+##' be extracted by fitting the moving regression model using \code{\link{fitQ}}.
 ##'
 ##' @param disc Vector of integers or character vector indicating the columns
-##' of \code{x} that correspond to variables that will be treated as discrete
+##' of \code{x} that correspond to variables that will be treated as discrete. These are the variables
+##' from which features will be extracted using \code{\link{discFeatures}}.
 ##'
-##' @param stats Character vector of summary statistics, which are passed to
-##' \code{\link{summaryStats}}.
+##' @param stats This argument defines the summary statistics that will be calculated
+##' for each of the regression parameters.  It can be a character vector of summary statistics,
+##' which are passed to \code{\link{summaryStats}}.  Or the function object returned by
+##' \code{\link{summaryStats}} may be supplied.
 ##'
-##' @param \dots Arguments for \code{\link{fitQ}}.
+##' @param fitQargs Named list of arguments for \code{\link{fitQ}}.  If \code{NULL}, the default arguments of
+##' \code{\link{fitQ}} are used.
 ##' 
 ##' @return A named vector containing the features for each of the variables
 ##' requested in \code{cont} and \code{disc}.  The names follow the form
@@ -28,16 +36,29 @@
 ##' 
 ##' @author Landon Sego
 ##'
-## @examples
+##' @examples
+##' # Load the data
+##' data(demoData)
+##' 
+##' # Select a subset of thedata
+##' d <- demoData[demoData$subject == 3 & demoData$phase == "b",]
+##' colnames(d)
+##' 
+##' # Run over that subset
+##' features <- getFeatures(d, cont = 3:4, disc = 8:11, stats = c("mean", "sd"),
+##'                         fitQargs = list(x1 = -5:5, start = 2))
+##' str(features)
+##' features
 
 getFeatures <- function(y, cont = NULL, disc = NULL,
                         stats = c("min", "q1", "mean", "med", "q3", "max", "sd", "count"),
-                        ...) {
+                        fitQargs = NULL) {
 
   # Basic sanity checks
   stopifnot(is.data.frame(y),
             !(is.null(cont) & is.null(disc)),
-            is.character(stats))
+            is.character(stats) | is.function(stats),
+            if (!is.null(fitQargs)) is.list(fitQargs) else TRUE)
 
   # Make sure 'cont' and 'disc' are the way we want them, if getFeatures() is called
   # from the global environment
@@ -47,6 +68,7 @@ getFeatures <- function(y, cont = NULL, disc = NULL,
     vars <- checkInputs(colnames(y), cont, disc)
     cont <- vars$cont
     disc <- vars$disc
+    cat("checking inputs\n")  ################# REMOVE LATER
   }
 
   # Make sure we have character inputs
@@ -59,23 +81,34 @@ getFeatures <- function(y, cont = NULL, disc = NULL,
   # Process continuous variables
   if (!is.null(cont)) {
 
-    # Define the summary stats function
-    sumStats <- summaryStats(stats)
-
-    # Calculate the features for continuous variable
-    out <- unlist(lapply(cont, function(x) summary(fitQ(y[,x], ...), stats = sumStats)))
+    # Verify they each are numeric variables
+    dummy <- lapply(cont,
+                    function(x) {
+                      if (!is.numeric(y[,x]))
+                        stop("in getFeatures(): '", x, "' was requested as a continuous variable, ",
+                             "but it is not numeric", call. = FALSE)
+                    })
     
-    ## for (cv in cont) {
-    ##   assign(cv, summary(fitQ(y[,cv], ...), stats = sumStats, vname = cv))
-    ## }
+    # Define the summary stats function
+    if (!is.function(stats)) {
+      sumStats <- summaryStats(stats)
+    }
 
-    ## out <- Smisc::qbind(cont, type = "c")
-      
+    # Add the names to the vector so that they are appended in the output
+    names(cont) <- cont
+    
+    # Calculate the features for continuous variable
+    out <- unlist(lapply(cont, function(x) summary(do.call(fitQ, c(list(y = y[,x]), fitQargs)), stats = sumStats)))
+    
   }
 
   # Process the discrete variables
   if (!is.null(disc)) {
 
+    # Add the names to the vector so that they are appended in the output
+    names(disc) <- disc
+
+    # Calculate the sumamries of the discrete features
     out <- c(out, unlist(lapply(disc, function(x) discFeatures(y[,x]))))
       
   }
@@ -112,13 +145,5 @@ checkInputs <- function(ny, cont, disc) {
 
 } # checkInputs
 
-
-## # Load the data
-data(demoData)
-
-# Now run over a subset
-d <- demoData[demoData$subject == 3 & demoData$phase == "b",]
-colnames(d)
-f <- getFeatures(d, cont = 2:4, disc = 7:8, stats = c("mean", "sd"), x1 = -5:5)
 
 

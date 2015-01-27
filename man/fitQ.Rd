@@ -8,7 +8,7 @@ fitQ(y, x1 = -10:10, min.window = 5, start = 1, skip = 1,
   linear.only = FALSE)
 
 \method{summary}{fitQ}(fitQ_object, stats = c("min", "q1", "mean", "med",
-  "q3", "max", "sd", "count"), vname = "V")
+  "q3", "max", "sd", "count"))
 }
 \arguments{
 \item{y}{A numeric vector}
@@ -31,8 +31,6 @@ window each time the model is fit.}
 \item{stats}{A character vector of summary statistics that are valid for
 \code{\link{summaryStats}}. Alternatively, the object returned by
 \code{\link{summaryStats}} may also be supplied for this argument.}
-
-\item{vname}{character string giving a prefix for the name labels}
 }
 \value{
 An object of class \code{fitQ}, which is list with

@@ -1,3 +1,6 @@
+0. Test examples on all platforms
+0. Unit tests for each function, compatible with Travis build
 1. Expand documentation, provide examples of use
 2. Create a vignette
 3. Show results
+

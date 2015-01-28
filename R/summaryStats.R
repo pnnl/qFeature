@@ -19,12 +19,13 @@
 ##'  \item{"kurt"}{kurtosis (Pearson's measure)}
 ##' }
 ##' All statistics are calcuated such that if there are too many \code{NAs}, an \code{NA}
-##' is returned.
+##' is returned.  The 'moments' package namespace is loaded if \code{skew} or \code{kurt}
+##' are requested.
 ##' 
 ##' @export
 ##' 
 ##' @param stats A character vector of summary statistics.  See details for acceptable
-##' values of \code{stats}
+##' values.
 ##'
 ##' @return A function that takes a single argument of a numerical vector, and returns
 ##' a named vector of the summary statistics of that vector
@@ -46,16 +47,25 @@ summaryStats <- function(stats) {
     stop("Valid arguments for 'stats' are '", paste(validStats, collapse = "', '"), "'")
   }
 
+  # Load the moments namespace if "skew" or "kurt" are requested
+  if (any(c("skew", "kurt") %in% stats)) {
+
+    if (!requireNamespace("moments")) {
+      stop("The 'momments' package must be installed to compute skewness ",
+           "('skew') or kurtosis ('kurt')")
+    }
+  }
+  
   # Create stat elements
   sw <- function(x) {
     switch(x,
            "min"   = "\n  min = sp.min(x),",
-           "q1"    = "\n  q1 = quantile(x, 0.25, na.rm = TRUE)[[1]],",
+           "q1"    = "\n  q1 = stats::quantile(x, 0.25, na.rm = TRUE)[[1]],",
            "mean"  = "\n  mean = sp.mean(x),",
-           "med"   = "\n  med = median(x, na.rm = TRUE),",
-           "q3"    = "\n  q3 = quantile(x, 0.75, na.rm = TRUE)[[1]],",
+           "med"   = "\n  med = stats::median(x, na.rm = TRUE),",
+           "q3"    = "\n  q3 = stats::quantile(x, 0.75, na.rm = TRUE)[[1]],",
            "max"   = "\n  max = sp.max(x),",
-           "sd"    = "\n  sd = sd(x, na.rm = TRUE),",
+           "sd"    = "\n  sd = stats::sd(x, na.rm = TRUE),",
            "sum"   = "\n  sum = sp.sum(x),",
            "ss"    = "\n  ss = sp.sum(x^2),",
            "count" = "\n  count = sp.count(x),",

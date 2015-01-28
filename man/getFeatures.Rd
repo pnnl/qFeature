@@ -32,7 +32,7 @@ A named vector containing the features for each of the variables
 requested in \code{cont} and \code{disc}.  The names follow the form
 [varname].[description], where the [varname] is specified in \code{cont} and
 \code{disc}, and [description] follows the naming convention produced by
-code{\link{summary.fitQ}} \code{\link{discFeatures}}.
+\code{\link{summary.fitQ}} and \code{\link{discFeatures}}.
 }
 \description{
 Fits the moving window quadratic (or linear) regression model for each continuous variable in a data frame,

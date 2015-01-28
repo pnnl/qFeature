@@ -2,7 +2,8 @@
 ##' 
 ##' Adaptations of common summary statistical functions
 ##' to return \code{NA} if all elements of \code{x} are \code{NA}.  The prefix 'sp' could
-##' be thought of as 'special'. These are internal functions used by the qFeature package.
+##' be thought of as 'special'. These are internal functions used by
+##' \code{\link{summaryStats}}.
 ##'
 ## @export sp.min sp.max sp.sum sp.count 
 ##' @rdname utility_functions
@@ -44,28 +45,28 @@
 
 sp.min <- function(x) {
   if (!all(is.na(x)))
-    return(min(x, na.rm=TRUE))
+    return(min(x, na.rm = TRUE))
   else
     return(NA)
 }
 
 sp.max <- function(x) {
   if (!all(is.na(x)))
-    return(max(x, na.rm=TRUE))
+    return(max(x, na.rm = TRUE))
   else
     return(NA)
 }
 
 sp.sum <- function(x) {
   if (!all(is.na(x)))
-    return(sum(x, na.rm=TRUE))
+    return(sum(x, na.rm = TRUE))
   else
     return(NA)
 }
 
 sp.mean <- function(x) {
   if (!all(is.na(x)))
-    return(mean(x, na.rm=TRUE))
+    return(mean(x, na.rm = TRUE))
   else
     return(NA)
 }
@@ -79,14 +80,14 @@ sp.count <- function(x) {
 
 sp.skewness <- function(x) {
   if (!all(is.na(x)))
-    return(moments::skewness(x, na.rm=TRUE))
+    return(moments::skewness(x, na.rm = TRUE))
   else
     return(NA)
 }
 
 sp.kurtosis <- function(x) {
   if (!all(is.na(x)))
-    return(moments::kurtosis(x, na.rm=TRUE))
+    return(moments::kurtosis(x, na.rm = TRUE))
   else
     return(NA)
 }

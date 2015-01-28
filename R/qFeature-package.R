@@ -8,7 +8,7 @@
 ##' Package: \tab qFeature\cr
 ##' Type: \tab Package\cr
 ##' Version: \tab 0.0.1\cr
-##' Date: \tab 2015-01-26\cr
+##' Date: \tab 2015-01-27\cr
 ##' License: \tab LICENSE\cr }
 ##' 
 ##' @name qFeature-package

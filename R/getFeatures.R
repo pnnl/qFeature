@@ -32,7 +32,7 @@
 ##' requested in \code{cont} and \code{disc}.  The names follow the form
 ##' [varname].[description], where the [varname] is specified in \code{cont} and
 ##' \code{disc}, and [description] follows the naming convention produced by
-##' code{\link{summary.fitQ}} \code{\link{discFeatures}}.
+##' \code{\link{summary.fitQ}} and \code{\link{discFeatures}}.
 ##' 
 ##' @author Landon Sego
 ##'
@@ -54,26 +54,17 @@ getFeatures <- function(y, cont = NULL, disc = NULL,
                         stats = c("min", "q1", "mean", "med", "q3", "max", "sd", "count"),
                         fitQargs = NULL) {
 
-  # Basic sanity checks
-  stopifnot(is.data.frame(y),
-            !(is.null(cont) & is.null(disc)),
-            is.character(stats) | is.function(stats),
-            if (!is.null(fitQargs)) is.list(fitQargs) else TRUE)
-
+  # Perform local checks so long as this function wasn't called from ddply_getFeatures()
   # Make sure 'cont' and 'disc' are the way we want them, if getFeatures() is called
-  # from the global environment
-  pe <- parent.frame()
+  # from the global environment.  The purpose of this is to avoid rechecking the
+  # arguments multiple times when getFeatures() is called from ddply_getFeatures()
   
-  if (environmentName(pe) == "R_GlobalEnv") {
-    vars <- checkInputs(colnames(y), cont, disc)
-    cont <- vars$cont
-    disc <- vars$disc
-    cat("checking inputs\n")  ################# REMOVE LATER
+  if (!("ddply_getFeatures" %in% sapply(sys.calls(), function(x) as.character(x)[1]))) {
+    v <- checkInputs(y, cont, disc, stats, fitQargs)
+    cont <- v$cont
+    disc <- v$disc
+    stats <- v$stats
   }
-
-  # Make sure we have character inputs
-  stopifnot(is.character(cont),
-            is.character(disc))
 
   # Initialize the output vector
   out <- NULL
@@ -89,16 +80,13 @@ getFeatures <- function(y, cont = NULL, disc = NULL,
                              "but it is not numeric", call. = FALSE)
                     })
     
-    # Define the summary stats function
-    if (!is.function(stats)) {
-      sumStats <- summaryStats(stats)
-    }
-
     # Add the names to the vector so that they are appended in the output
     names(cont) <- cont
     
     # Calculate the features for continuous variable
-    out <- unlist(lapply(cont, function(x) summary(do.call(fitQ, c(list(y = y[,x]), fitQargs)), stats = sumStats)))
+    out <- unlist(lapply(cont,
+                         function(x) summary(do.call(fitQ, c(list(y = y[,x]), fitQargs)),
+                                             stats = stats)))
     
   }
 
@@ -118,32 +106,79 @@ getFeatures <- function(y, cont = NULL, disc = NULL,
 } # getFeatures
 
 # Function for checking the inputs of getFeatures() and qFeature()
-checkInputs <- function(ny, cont, disc) {
+checkInputs <- function(y, cont, disc, stats, fitQargs) {
 
-  # ny = colnames
+  # structural checks
+  stopifnot(is.data.frame(y),
+            !(is.null(cont) & is.null(disc)),
+            is.character(stats) | is.function(stats))
 
-  if (!is.null(cont)) {
-    if (!is.character(cont)) {
-      cont <- ny[cont]
-    }
-    if (!all(cont %in% ny)) {
-      stop("'cont' column names '", paste(setdiff(cont, ny), sep = "', '"),
-           "' are not in 'y'")
-    }
+  ny <- colnames(y)
+
+  # Checks for cont and disc
+  checks <- function(var) {
+
+    name <- deparse(substitute(var))
+    
+    if (!is.null(var)) {
+
+      if (!is.character(var)) {
+
+        if (!is.numeric(var)) {
+          stop("Non-character entries to '", name, "' must be numeric, indicating ",
+               "the column numbers of 'y'")
+        }
+
+        # Column numbers must be viable
+        if (!all(var %in% 1:length(ny))) {
+          stop("The following column indexes provided to '", name,
+               "' are outside the range of the columns of 'y': ",
+               paste(setdiff(var, 1:length(ny)), collapse = ", "))
+        }
+      
+        var <- ny[var]
+      
+      } # If it's not character
+
+      # If it is character, the names must be in the column names
+      else if (!all(var %in% ny)) {
+
+        stop("Invalid values for '", name, "':  '",
+             paste(setdiff(var, ny), sep = "', '"),
+             "' are not in the column names of 'y'")
+      }
+      
+    } # If it's not NULL
+
+    return(var)
+    
+  } # checks
+
+  cont <- checks(cont)
+  disc <- checks(disc)
+  
+  # Define the summary stats function only once
+  if (!is.function(stats)) {
+    stats <- summaryStats(stats)
   }
-  if (!is.null(cont)) {
-    if (!is.character(disc)) {
-      disc <- ny[disc]
+  
+  # Check fitQargs
+  if (!is.null(fitQargs)) {
+      
+    stopifnot(is.list(fitQargs))
+
+    n.fitQargs <- names(fitQargs)
+    n.fitQ <- names(formals(fitQ))[-1]
+    
+    if (!(all(n.fitQargs %in% n.fitQ))) {
+      stop("'", paste(setdiff(n.fitQargs, n.fitQ), collapse = "', '"),
+           "' are not valid arguments for fitQ()")
+         
     }
-    if (!all(disc %in% ny)) {
-      stop("'disc' column names '", paste(setdiff(disc, ny), sep = "', '"),
-           "' are not in 'y'")
-    }    
+    
   }
 
-  return(list(cont = cont, disc = disc))
+  # Return parameters that may have been modified
+  return(list(cont = cont, disc = disc, stats = stats))
 
 } # checkInputs
-
-
-

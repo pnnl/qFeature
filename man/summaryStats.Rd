@@ -7,7 +7,7 @@ summaryStats(stats)
 }
 \arguments{
 \item{stats}{A character vector of summary statistics.  See details for acceptable
-values of \code{stats}}
+values.}
 }
 \value{
 A function that takes a single argument of a numerical vector, and returns
@@ -34,7 +34,8 @@ The acceptable values of \code{stats} are
  \item{"kurt"}{kurtosis (Pearson's measure)}
 }
 All statistics are calcuated such that if there are too many \code{NAs}, an \code{NA}
-is returned.
+is returned.  The 'moments' package namespace is loaded if \code{skew} or \code{kurt}
+are requested.
 }
 \examples{
 f <- summaryStats(c("q3","q1","mean","count","med"))

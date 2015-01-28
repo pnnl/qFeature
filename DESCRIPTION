@@ -3,16 +3,20 @@ Title: Extract features from time series using moving windows of regression fits
 Version: 0.0.1
 Author: Landon Sego
 Description: Extract features from time series using moving windows of
-    regression fits. This is a high-speed implementation of the feature
-    extraction methods of the Morning Report Algorithms developed by Brett
-    Amidan and Tom Ferryman.
+    regression fits for continuous variables and by summarizing the duration
+    and transistion features of discrete variables. This is a high-speed
+    implementation of the feature extraction methods of the Morning Report
+    Algorithms developed by Brett Amidan and Tom Ferryman.
 Maintainer: Landon Sego <Landon.Sego@pnl.gov>
-Imports:
-    Smisc,
+Imports: 
     plyr,
+    stats
+Suggests: 
     moments,
+    foreach,
     doParallel,
     parallel,
-    stats
+    Smisc,
+    testthat
 License: LICENSE
 Packaged: 

@@ -2,6 +2,10 @@
 # qFeature package
 demoData <- function() {
 
+  if (!requireNamespace("Smisc", quietly = TRUE)) {
+    stop("The 'demoData' require the 'Smisc' package to be installed")
+  }
+    
   # To create the data for a subject and phase
   singleOb <- function(inVec) {
 

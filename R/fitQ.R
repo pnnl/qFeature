@@ -74,8 +74,11 @@ fitQ <- function(y,
                  min.window = 5,
                  start = 1,
                  skip = 1,
-                 linear.only = FALSE) {
-
+                 linear.only = FALSE,
+                 checkArgs = TRUE) {
+    
+#### Consolidating the checks here...
+    
   n <- length(y)
 
   # Basic checks
@@ -83,8 +86,10 @@ fitQ <- function(y,
             is.numeric(x1),
             is.numeric(min.window),
             length(min.window) == 1,
+            min.window %% 1 == 0,
             is.numeric(skip),
             length(skip) == 1,
+            skip %% 1 == 0,
             is.logical(linear.only))
     
   # Define the window bandwith (in terms of the number of data points)
@@ -113,7 +118,7 @@ fitQ <- function(y,
             "  the series will not be covered by a window\n")
   
   # Index of window centers
-  win.centers <- seq(start, n, by=skip)
+  win.centers <- seq(start, n, by = skip)
   num.windows <- length(win.centers)
 
   if (!linear.only) {

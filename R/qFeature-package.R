@@ -15,7 +15,7 @@
 ##' @aliases qFeature
 ##' @useDynLib qFeature
 ##' @docType package
-##' @author Landon Sego, Brett Amidan, Tom Ferryman
+##' @author Landon Sego
 ##' 
 ##' Maintainer: Landon Sego <Landon.Sego@@pnnl.gov>
 ##' @keywords package

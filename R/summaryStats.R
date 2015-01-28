@@ -74,7 +74,7 @@ summaryStats <- function(stats) {
   } # sw
   
 
-  # Create the function to calculate the summary stats
+  # Create the function to calculate the named vector of summary stats
   fText <- paste("function(x) { c(",
                  paste(unlist(lapply(stats, sw)), collapse = ""),
                  ")\n}", sep = "")

@@ -9,7 +9,7 @@
 ##' Summarizes the type and location of transitions between discrete states in
 ##' an integer vector
 ##' 
-##' The algorithm applies a discrete, 1-1 map, say \code{m}, to the vector
+##' The algorithm applies a discrete, 1-1 map, which we'll call \code{m}, to the vector
 ##' \code{y} such that the first differences of m(y) uniquely identify the
 ##' transitions between all the possible values of \code{y}. It creates the
 ##' map, calculates the first differences of \code{m(y)}, and produces a set of
@@ -23,11 +23,15 @@
 ##' @param y.unique An integer vector containing the unique values of \code{y}
 ##' 
 ##' @return A list with the following components: (also see example below)
+##' \describe{
 ##' \item{diffMap}{The first differences of \code{m(y)} which identify the
-##' position and type of state transition in \code{y}} \item{from}{The 'from'
-##' state labels} \item{to}{The 'to' state labels} \item{transValue}{The value
-##' that \code{diffMap} will take when \code{y} transitions from the state
-##' label in \code{from} to the corresponding state label in \code{to}}
+##' position and type of state transition in \code{y}}
+##' \item{from}{The 'from' state labels}
+##' \item{to}{The 'to' state labels}
+##' \item{transValue}{The value that \code{diffMap} will take when
+##' \code{y}{transitions from the state label in \code{from} to the corresponding
+##' state label in \code{to}}
+##' }
 ##' 
 ##' @author Landon Sego
 ##' 
@@ -98,6 +102,6 @@ transMap <- function(y, y.unique) {
   out[["transValue"]] <- out[["transValue"]][nonZero]
 
   # Return the list
-  out
+  return(out)
      
 } # transMap

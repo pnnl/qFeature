@@ -18,6 +18,7 @@
 ##'  \item{"skew}{skewness}
 ##'  \item{"kurt"}{kurtosis (Pearson's measure)}
 ##' }
+##' 
 ##' All statistics are calcuated such that if there are too many \code{NAs}, an \code{NA}
 ##' is returned.  The 'moments' package namespace is loaded if \code{skew} or \code{kurt}
 ##' are requested.

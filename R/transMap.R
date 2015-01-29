@@ -23,15 +23,13 @@
 ##' @param y.unique An integer vector containing the unique values of \code{y}
 ##' 
 ##' @return A list with the following components: (also see example below)
-##' \describe{
 ##' \item{diffMap}{The first differences of \code{m(y)} which identify the
 ##' position and type of state transition in \code{y}}
 ##' \item{from}{The 'from' state labels}
 ##' \item{to}{The 'to' state labels}
 ##' \item{transValue}{The value that \code{diffMap} will take when
-##' \code{y}{transitions from the state label in \code{from} to the corresponding
+##' \code{y} transitions from the state label in \code{from} to the corresponding
 ##' state label in \code{to}}
-##' }
 ##' 
 ##' @author Landon Sego
 ##' 

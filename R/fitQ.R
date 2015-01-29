@@ -53,10 +53,12 @@
 ##' 
 ##' @return An object of class \code{fitQ}, which is list with
 ##' the 4 component vectors that contain the results of the
-##' quadratic model fits.  \item{a}{The estimated intercepts} \item{b}{The
-##' estimated linear coefficients} \item{c}{The estimated quadratic
-##' coefficients.  These are \code{NA} is \code{linear.only = TRUE}} \item{d}{The
-##' root mean squared error (RMSE)}
+##' quadratic model fits.
+##' \item{a}{The estimated intercepts}
+##' \item{b}{The estimated linear coefficients}
+##' \item{c}{The estimated quadratic coefficients. These are \code{NA} is
+##'          \code{linear.only = TRUE}}
+##' \item{d}{The root mean squared error (RMSE)}
 ##' 
 ##' @author Landon Sego
 ##' 

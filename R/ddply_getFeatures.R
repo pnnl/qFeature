@@ -10,7 +10,7 @@
 ##' if requested via \code{nJobs > 1}, is facilitated via the 
 ##' \code{.parallel} argument of \code{\link[plyr:ddply]{plyr::ddply}}, which in turn
 ##' relies on \code{\link[foreach:foreach]{foreach::foreach}},
-##' \code{\link[doParallel:doParallel]{doParallel::doParallel}}, and various functions
+##' \code{\link[doParallel:registerDoParallel]{doParallel::registerDoParallel}}, and various functions
 ##' from the \pkg{parallel} package.
 ##' 
 ##' @export
@@ -120,7 +120,9 @@ ddply_getFeatures <- function(y, .variables, cont = NULL, disc = NULL,
     # Extract and remove bogus warnings
     if (!is.null(o$warning)) {
 
+      # The bogus warning
       bogus <- c("<anonymous>: ... may be used in an incorrect context: '.fun(piece, ...)'\n")
+      
       # Identify the valid warnings
       validWarnings <- unlist(lapply(o$warning, function(x) x$message != bogus))
 

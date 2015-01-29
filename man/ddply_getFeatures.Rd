@@ -53,7 +53,7 @@ Parallel processing,
 if requested via \code{nJobs > 1}, is facilitated via the
 \code{.parallel} argument of \code{\link[plyr:ddply]{plyr::ddply}}, which in turn
 relies on \code{\link[foreach:foreach]{foreach::foreach}},
-\code{\link[doParallel:doParallel]{doParallel::doParallel}}, and various functions
+\code{\link[doParallel:registerDoParallel]{doParallel::registerDoParallel}}, and various functions
 from the \pkg{parallel} package.
 }
 \examples{

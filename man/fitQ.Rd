@@ -5,7 +5,7 @@
 \title{Fits a moving window quadratic (or simple linear) regression model}
 \usage{
 fitQ(y, x1 = -10:10, min.window = 5, start = 1, skip = 1,
-  linear.only = FALSE)
+  linear.only = FALSE, checkArgs = TRUE)
 
 \method{summary}{fitQ}(fitQ_object, stats = c("min", "q1", "mean", "med",
   "q3", "max", "sd", "count"))
@@ -35,10 +35,12 @@ window each time the model is fit.}
 \value{
 An object of class \code{fitQ}, which is list with
 the 4 component vectors that contain the results of the
-quadratic model fits.  \item{a}{The estimated intercepts} \item{b}{The
-estimated linear coefficients} \item{c}{The estimated quadratic
-coefficients.  These are \code{NA} is \code{linear.only = TRUE}} \item{d}{The
-root mean squared error (RMSE)}
+quadratic model fits.
+\item{a}{The estimated intercepts}
+\item{b}{The estimated linear coefficients}
+\item{c}{The estimated quadratic coefficients. These are \code{NA} is
+         \code{linear.only = TRUE}}
+\item{d}{The root mean squared error (RMSE)}
 }
 \description{
 Fits a moving quadratic (or simple linear) regression model over a series

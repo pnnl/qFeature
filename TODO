@@ -1,4 +1,8 @@
-0. Unit tests for each function, compatible with Travis build
-1. Complete documentation
-2. Create a vignette
+1. Gather error handling in fitQ into a single function.
+   Consider passing the main arguments to ddply_getFeatures and qFit 
+   as a valided object (which therefore needs no checking).
+2. Unit tests for each function, compatible with Travis build
+3. Complete documentation.  Mention how orthogonal fits can be created
+   with quadratic and that it will give the same result as linear.
+4. Create a vignette
 

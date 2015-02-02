@@ -1,0 +1,17 @@
+---
+output:
+  html_document:
+    highlight: textmate
+    theme: default
+    toc: no
+  pdf_document:
+    highlight: default
+  word_document: default
+---
+
+<!---
+Author: Lucas Tate <lucas.tate@pnnl.gov>
+Created: Feb 02, 2015
+Last Updated: Feb 02, 2015
+-->
+

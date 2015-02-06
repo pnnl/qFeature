@@ -9,20 +9,29 @@
 ##' Fits a moving window quadratic (or simple linear) regression model
 ##' 
 ##' Fits a moving quadratic (or simple linear) regression model over a series
-##' using a 2-sided window.  It dynamically accounts for the incomplete windows
+##' using a 2-sided window.
+##'
+##' This function dynamically accounts for the incomplete windows
 ##' which are caused by missing values and which occur at the beginning and end
 ##' of the series.
-##' 
-##' Fits the model
+##' A quadratic regression model is used if \code{linear.only = FALSE}:
 ##' 
 ##' \code{y = a + b*x1 + c*x1^2 + e}
 ##' 
-##' if \code{linear.only = FALSE}, or, if \code{linear.only = TRUE}, fits
+##' and a simple linear regression model is used if \code{linear.only = TRUE}:
 ##' 
 ##' \code{y = a + b*x1 + e}
-##' 
-##' The model is fit repeatedly over a moving window. For the quadratic model,
-##' it rapidly calculates the least squares estimates by centering the
+##'
+##' where \code{a}, \code{b}, and \code{c} are regression coefficients, and \code{e}
+##' represents the residual error.  The regression model is fit repeatedly over a two-sided
+##' moving window across the values of \code{y}. The middle element of \code{x1} is aligned with
+##' an element of \code{y} and then the regression model coefficients are calculated for that element
+##' of \code{y}.
+##' Consequently, the size of the moving window is determined by
+##' the the number of elements in \code{x1}. For example, if \code{x1 = -3:3}, the size
+##' of the moving window is 7. 
+##'
+##' For the quadratic model, \code{fitQ} rapidly calculates the least squares estimates by centering the
 ##' predictors so that they are orthogonal (or nearly orthogonal, if data in
 ##' the window are missing).  Then the orthogonal coefficients are
 ##' 'backtransformed' to the original, non-orthogonal parameterization.
@@ -30,7 +39,7 @@
 ##' linear regression model.
 ##' 
 ##' The handling of the moving windows and missing values in this function is
-##' very similar to \code{\link[Smisc]{smartFilter}} in \pkg{Smisc}.
+##' very similar to \code{\link[Smisc:smartFilter]{Smisc::smartFilter}}.  
 ##'
 ##' @export
 ##' 
@@ -52,24 +61,120 @@
 ##' \code{x1} as the single predictor, instead of a quadratic regression model.
 ##' 
 ##' @return An object of class \code{fitQ}, which is list with
-##' the 4 component vectors that contain the results of the
-##' quadratic model fits.
+##' the 4 vectors that contain the results of the
+##' quadratic model fits:
 ##' \item{a}{The estimated intercepts}
 ##' \item{b}{The estimated linear coefficients}
 ##' \item{c}{The estimated quadratic coefficients. These are \code{NA} is
 ##'          \code{linear.only = TRUE}}
 ##' \item{d}{The root mean squared error (RMSE)}
+##' The first element of the vectors \code{a}, \code{b}, \code{c}, and \code{d} contains the model
+##' coefficients corresponding to the first data point in \code{y}.  The second element in
+##' the vectors \code{a}, \code{b}, \code{c}, and \code{d} contains the model
+##' coefficients corresponding to the second data point in \code{y}, etc.
 ##' 
 ##' @author Landon Sego
 ##' 
 ##' @examples
 ##'# Calculate the rolling window quadratic fit
-##'y <- fitQ(rnorm(25), -3:3)
-##'y
-##'summary(y)
+##'z <- fitQ(rnorm(25), -3:3)
+##'z
+##'summary(z)
 ##'
-##'# Define our own summary stats
-##'summary(y, stats = c("count", "mean", "kurt"))
+##'# Or we can request our own summary stats
+##'summary(z, stats = c("count", "mean", "kurt"))
+##'
+
+## Text and examples for the Appendix of the vignette
+
+## # Now let's illustrate in greater detail how \code{fitQ} behaves:
+## y <- rnorm(10)
+## x1 <- -3:3
+## x2 <- x1^2
+## f <- fitQ(y, x1)
+## f
+
+## # A little function to extract out the same pieces from the \code{lm} object that
+## # we wish to compare to \code{f}, the \code{fitQ} object
+## extract.lm <- function(lmObject) {
+    
+##   x <- c(coef(lmObject), summary(lmObject)$sigma)
+##   names(x) <- letters[1:4]
+
+##   return(x)
+  
+## }
+
+## # A little function for extracting the i'th element of each of the vectors in
+## # a \code{fitQ} object, to compare to the output of \code{extract.lm()}:
+## extract.fitQ <- function(fitQobject, i) {
+
+##    return(unlist(lapply(fitQobject, function(x) x[i])))
+    
+## }
+
+## # For the first element in \code{y}, the regression model that would be fit would be
+## extract.lm(lm(y[1:4] ~ x1[4:7] + x2[4:7]))
+
+## # Note how the middle point of \code{x1}, which, in this case, is \code{x[4] = 0},
+## # is aligned with \code{y[1]}.
+## # However, the first element in the vectors of \code{f} are \code{NA}:
+## extract.fitQ(f, 1)
+
+## # This is because the default value of \code{min.window = 5} requires
+## # there be at least 5 non-missing data points to fit the regression model, whereas there were only 4 in
+## # this case.  For the second element of \code{y}, the regression model is constructed
+## # by aligning the middle point of \code{x1} with the second element of \code{y}: 
+## extract.lm(lm(y[1:5] ~ x1[3:7] + x2[3:7]))
+
+## # And the second vector elements from \code{fitQ()} match the results from the \code{lm()} fit:
+## extract.fitQ(f, 2)
+
+## # Here's what we see for the third element in \code{y}:
+## extract.lm(lm(y[1:6] ~ x1[2:7] + x2[2:7]))
+## extract.fitQ(f, 3)
+
+## # Once we get to the fourth element, we are able to fit a model with the whole window
+## # of seven elements (because \code{x1} has seven elements):
+## extract.lm(lm(y[1:7] ~ x1 + x2))
+## extract.fitQ(f, 4)
+
+## # And all subsequent elements in the body of \code{y} use the whole window as well,
+## extract.lm(lm(y[2:8] ~ x1 + x2))
+## extract.fitQ(f, 5)
+
+## # Until we get to the end of \code{y}, in which case the the last elements of \code{x1} start
+## # dropping off.  Here's the fit for the 8th element of \code{y}:
+## extract.lm(lm(y[5:10] ~ x1[1:6] + x2[1:6]))
+## extract.fitQ(f, 8)
+
+## # And the 9th element of \code{y}:
+## extract.lm(lm(y[6:10] ~ x1[1:5] + x2[1:5]))
+## extract.fitQ(f, 9)
+
+## # An illustration how how \code{fitQ()} handles \code{NA}'s is also in order.  Let's insert an
+## # \code{NA} into \code{y}:
+## y[3] <- NA
+## f <- fitQ(y, x1)
+## f
+
+## # The first elements of the \code{fitQ} object are \code{NA} because there are only 3 non-missing
+## # data points in the window for the first element:
+## sum(!is.na(y[1:4]))
+
+## # The second elements
+## # are \code{NA} because there are only 4 non-missing data points in the window that  is centered on the
+## # second element of y:
+## sum(!is.na(y[1:5]))
+
+## # However, for the third element of y, we now have 5 non-missing data points, which is the default
+## # value for \code{min.window}, the minimum allowable number of non-missing values:
+## sum(!is.na(y[1:6]))
+
+## # And we see that the models agree
+## extract.lm(lm(y[1:6] ~ x1[2:7] + x2[2:7]))
+## extract.fitQ(f, 3)
+
 
 fitQ <- function(y,
                  x1 = -10:10,

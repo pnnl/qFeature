@@ -34,31 +34,44 @@ window each time the model is fit.}
 }
 \value{
 An object of class \code{fitQ}, which is list with
-the 4 component vectors that contain the results of the
-quadratic model fits.
+the 4 vectors that contain the results of the
+quadratic model fits:
 \item{a}{The estimated intercepts}
 \item{b}{The estimated linear coefficients}
 \item{c}{The estimated quadratic coefficients. These are \code{NA} is
          \code{linear.only = TRUE}}
 \item{d}{The root mean squared error (RMSE)}
+The first element of the vectors \code{a}, \code{b}, \code{c}, and \code{d} contains the model
+coefficients corresponding to the first data point in \code{y}.  The second element in
+the vectors \code{a}, \code{b}, \code{c}, and \code{d} contains the model
+coefficients corresponding to the second data point in \code{y}, etc.
 }
 \description{
 Fits a moving quadratic (or simple linear) regression model over a series
-using a 2-sided window.  It dynamically accounts for the incomplete windows
-which are caused by missing values and which occur at the beginning and end
-of the series.
+using a 2-sided window.
 }
 \details{
-Fits the model
+This function dynamically accounts for the incomplete windows
+which are caused by missing values and which occur at the beginning and end
+of the series.
+A quadratic regression model is used if \code{linear.only = FALSE}:
 
 \code{y = a + b*x1 + c*x1^2 + e}
 
-if \code{linear.only = FALSE}, or, if \code{linear.only = TRUE}, fits
+and a simple linear regression model is used if \code{linear.only = TRUE}:
 
 \code{y = a + b*x1 + e}
 
-The model is fit repeatedly over a moving window. For the quadratic model,
-it rapidly calculates the least squares estimates by centering the
+where \code{a}, \code{b}, and \code{c} are regression coefficients, and \code{e}
+represents the residual error.  The regression model is fit repeatedly over a two-sided
+moving window across the values of \code{y}. The middle element of \code{x1} is aligned with
+an element of \code{y} and then the regression model coefficients are calculated for that element
+of \code{y}.
+Consequently, the size of the moving window is determined by
+the the number of elements in \code{x1}. For example, if \code{x1 = -3:3}, the size
+of the moving window is 7.
+
+For the quadratic model, \code{fitQ} rapidly calculates the least squares estimates by centering the
 predictors so that they are orthogonal (or nearly orthogonal, if data in
 the window are missing).  Then the orthogonal coefficients are
 'backtransformed' to the original, non-orthogonal parameterization.
@@ -66,7 +79,7 @@ Centering and orthogonality are not required to quickly fit the simple
 linear regression model.
 
 The handling of the moving windows and missing values in this function is
-very similar to \code{\link[Smisc]{smartFilter}} in \pkg{Smisc}.
+very similar to \code{\link[Smisc:smartFilter]{Smisc::smartFilter}}.
 }
 \section{Methods (by generic)}{
 \itemize{
@@ -77,12 +90,12 @@ required in the \code{stats} argument of the \code{summary} method.
 }}
 \examples{
 # Calculate the rolling window quadratic fit
-y <- fitQ(rnorm(25), -3:3)
-y
-summary(y)
+z <- fitQ(rnorm(25), -3:3)
+z
+summary(z)
 
-# Define our own summary stats
-summary(y, stats = c("count", "mean", "kurt"))
+# Or we can request our own summary stats
+summary(z, stats = c("count", "mean", "kurt"))
 }
 \author{
 Landon Sego

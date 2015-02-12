@@ -12,14 +12,14 @@ output:
 <!---
 Author: Lucas Tate <lucas.tate@pnnl.gov>
 Created: Feb 02, 2015
-Last Updated: Feb 02, 2015
+Last Updated: Feb 12, 2015
 -->
 
 #qFeature
-The goal of this guide is to be used as a quick start guide for using `qFeature`package followed by a deeper look into the various moving parts for those interested in a more detailed description.
+The goal of this guide is to be used as a quick start guide for using `qFeature`package. This guide begins with a quick installation guide in 'Getting Started'. Following installation is a very basic diagram of the 'Package Structure' to illustrate the heirarchy of functions. Finally, this document finishes off by providing details on using the 4 'Core Functions' contained within the package complete with follow-along examples. An additional vignette titled "Ryan's Shnazzy Vignette" by Ryan Butner provides more detailed on information on how to take the information extracted by this package and utilize it for anlysis.
 
 ##Description
-The `qFeature` package is designed to produce a multivariate signature from continuous and discrete variables contained within a time series dataset. The package was created with the intent of generalizing the feature extraction tools developed by Brett Amidan and Tom Ferryman that are used in the `calcIVT` package. This allows the package to be extended to support feature extraction in a wide-ranging array of data.
+The `qFeature` package written by Landon Sego is designed to produce a multivariate signature from continuous and discrete variables contained within a time series dataset. This is a high-speed implementation of the feature extraction methods of the Morning Report Algorithms developed by Brett Amidan and Tom Ferryman.
 
 ##Getting Started
 
@@ -44,7 +44,7 @@ help(package=qFeature)
 
 
 ##Package Structure
-```{r message=FALSE, warning=FALSE, echo=FALSE}
+```{r package_structure_plot, message=FALSE, warning=FALSE, echo=FALSE}
 require(qFeature)
 require(mvbutils)
 
@@ -52,16 +52,14 @@ set.seed(9)
 
 foodweb(where="package:qFeature",
         border="#00CCFF", boxcolor = "#E6FAFF",
+        prune=c("ddply_getFeatures",
+                "getFeatures",
+                "discFeatures",
+                "fitQ"),
+        descendents=FALSE,
         expand.xbox=1.2, expand.ybox=3,
         textcolor="black", cex=1, lwd=1)
 ```
-
-##Using the Package
-This will be a crash course in using the package without any of the nitty-grittys
-
-##Core Functions
-
-Hopefully by know you have a working understanding of the `qFeature` package, but for those of you who require a more intimate knowledge of the inner-workings, we continue with a description of the core functions within the package starting from the ground up. I would strongly encourage you to refer to the package structure as it provides a very helpful illustration of where each function fits within the package.
 
 ###[discFeatures()](http://martingale.pnl.gov/computing/repos/html_help/qFeature/html/discFeatures.html "discFeatures() - R Help Page")
 ####Description
@@ -70,19 +68,22 @@ This function is intended for use on a time series variable with discrete states
 ####How to use discFeatures()
 Using `discFeatures()` is most easily demonstrated with a simple example. Let's begin by creating a small dataset with 2 discrete states (TRUE/FALSE).
 ```{r}
-sampleDataSet <- c("TRUE", "FALSE", "FALSE", NA, "TRUE", "TRUE", NA, NA, "TRUE", "FALSE", "TRUE", "FALSE", "TRUE")
-sampleDataSet
+discData <- c("TRUE", "FALSE", "FALSE", NA, "TRUE", "TRUE", NA, NA, "TRUE", "FALSE", "TRUE", "FALSE", "TRUE")
+discData
 ```
 Now we have a small data set of length 13 that contains two discrete phases and 3 missing values stored as NA. Now if we apply the `discFeatures()` function to our dataset we can see what happens.
 ```{r}
 require(qFeature)
 
-discFeatures(sampleDataSet)
+discFeatures(discData)
 ```
-As you can see the percentage calculations are made without consideration of the missing values and reflect that 40% of the data are FALSE and 60% of the data are TRUE. Additionally we have some information about transitions or in other words we can see that the value changed from FALSE to TRUE 3 times and from TRUE to FALSE 3 times. Go ahead and count the transitions yourself just to make sure you agree with the output. The transitions have significance because this function is intended to be used on time series data and so there is a chronological significance when there is a transition from one state to another.
+
+As you can see the percentage calculations are made without consideration of the missing values and reflect that 40% of the data are FALSE and 60% of the data are TRUE. Additionally we have some information about transitions or in other words we can see that the value changed from FALSE to TRUE 3 times and from TRUE to FALSE 3 times. Go ahead and count the transitions yourself just to make sure you agree with the output. The transitions have significance because this function is intended to be used on time series data and so a transition from one state to another could be meaningful.
 
 ###[fitQ()](http://martingale.pnl.gov/computing/repos/html_help/qFeature/html/fitQ.html "fitQ() - R Help Page")
+
 ####Description
+
 Fits a moving quadratic (or simple linear) regression model over a series using a 2-sided window. It dynamically accounts for the incomplete windows which are caused by missing values and which occur at the beginning and end of the series. This function is used to extract data from continuous variables.
 
 ####How to use fitQ()
@@ -109,30 +110,216 @@ After our initial linear or quadratic model is fit, several features are extract
 
 The data moves through the window by an increment of `skip` which has a default of 1 and fits a model using the data contained in each new window. This iterates over the entire vector of the response measure in order to produce a signature of features with a corresponding **a**, **b**, **c**, and **d** for each regression that was fit.
 
-####Illustration
+#####Illustration
 
-The illustration below provides a simple demonstration of how `fitQ()` fits a series of regression models to finite windows of data. The gray points denote data that falls outside the current window that is being used in fitting the regression model. In this example a window of `x1` = -3:3 is used with a `min.window` = 4. This means that as soon as 4 non-empty values have entered the window, to go ahead and fit a model. In this depiction there are only 10 windows, however in practice, the windows would continue to be fit through the entire vector of data in `y`.
+The illustration below provides a simple demonstration of how `fitQ()` fits a series of regression models to finite windows of data. The gray points denote data that falls outside the current window that is being used in fitting the regression model. In this example a window of `x1` = -3:3 is used with a `min.window` = 4. Unless otherwise specified the first window will begin centered on the first data point and likewise the last window will be centered on the last data point.
 
-<center><img src="http://i.imgur.com/y3oz9Vy.gif"></center>
+<center><img src="http://i.imgur.com/gcbiMWz.gif"></center>
 
-Now let's take a look at a quick R example.
+Now let's take a look at a few quick R example that illustrate the function at work as well as how the function reacts to several potential issues in the data. 
+
+#####Example 1
+
+We begin by creating our first sample data set to help understand where the features are coming from.
+
+```{r}
+set.seed(10)
+fitqDataEx1 <- rnorm(7, 5, 1)
+fitqDataEx1
+```
+
+We now have a small vector of length 7 containing randomly generated numbers. Now we can pass the vector into our `fitQ()` function and take a look at the output.
+
+```{r}
+require(qFeature)
+fitQ(y = fitqDataEx1, x1 = -3:3, min.window = 4)
+```
+
+It may not be readily apparent, but there are the same number of values for each of the 4 features extracted and the number of values should equal the length of the vector `y` (when `skip`=1) because the center of the first window is on the first point and the center moves by an increment of `skip` which has a default of 1 through the entire vector of `y`.
+
+Futhermore, the first values of **a**, **b**, **c**, and **d** are all drawn from the same window as are the second, third, and so on and so forth. We can illustrate this by manually fitting the 2nd window and comparing the results. Realize at the second window fit there will only be 5 points that fall inside the window and are fit to the regression, which can be seen in the illustration above. For this reason we will fit the regression to the first 5 points from our dataset and the corresponding section of our window.
+
+```{r}
+y <- fitqDataEx1[1:5]
+x1 <- c(-1:3)
+summary(lm(y ~ x1 + I(x1^2)))
+```
+
+As you can see (aside from rounding):
+
+* Coefficient estimate for the intercept equals to the second value of __a__
+* Coefficient estimate for x1 equals to the second value of __b__
+* Coefficient estimate of I(x1^2) equals to the second value of __c__
+* Residual standard error equals to the second value of __d__
 
 
+Hopefully the first example helps to solidify how the feature extraction is being populated. Let's continue by taking a look at a few issues you might encounter.
+
+#####Example 2
+
+First begin by taking a look at the illustration above and ask yourself "When the first window is centered on the first point, what happens if our `min.window` = 5 instead?". Let's take a look at an example to demonstrate this scenario. We begin by creating another data set.
+
+```{r}
+set.seed(20)
+fitqDataEx2 <- rnorm(7, 5, 1)
+fitqDataEx2
+```
+
+We now have a small vector of length 7 containing randomly generated numbers. Now we can pass the vector into our `fitQ()` function with a `min.window`=5 and see how the function responds.
+
+```{r}
+require(qFeature)
+fitQ(y = fitqDataEx2, x1 = -3:3, min.window = 5)
+```
+
+As you can see in the output an NA is produced for the first value of each of the features as well as at the end. This is because we are requiring 5 points to fit a regression and since the first and last windows each contain only 4 points (refer to Window 1 and Window 10 of the illustration if you need to convince yourself), no regression will be fit and there will be no features to extract so the function will return NAs.
+
+#####Example 3
+
+So what happens then the function encounters missing values in the data? We begin by creating another data set, this time with missing values.
+
+``` {r}
+set.seed(30)
+fitqDataEx3 <- rnorm(15, 5, 1)
+fitqDataEx3[c(5,7, 9, 10)] <- NA
+fitqDataEx3
+```
+
+We now have an example data vector of length 15 with 11 non-missing and 4 missing values. We can now implement the function and see what happens.
+
+
+```{r}
+require(qFeature)
+fitQ(y = fitqDataEx3, x1 = -3:3, min.window = 4)
+```
+
+We can see that NA values were produced in each of the features that correspond with the 7th and 8th windows fit to the data. Let's investigate the data in those windows to see why. 
+
+```{r}
+Window7 <- fitqDataEx3[4:10]
+Window7
+
+Window8 <- fitqDataEx3[5:11]
+Window8
+```
+
+As you can see, in the range of data points for both Window7 and Window8 we only have 3 non-missing data points which resulted in our inability to fit regressions and consequently produced NA values in our feature extraction.
 
 ###[getFeatures()](http://martingale.pnl.gov/computing/repos/html_help/qFeature/html/getFeatures.html "getFeatures() - R Help Page")
+
 ####Description
-The `getFeatures()` function is the main workhorse of the `qFeature()` package. It incorporates the capability of `fitQ()`, `discFeatures()`, and `summary.fitQ` in order to extract multivariate feature information to form the resulting signature matrix for both discrete and continuous variables.
+The `getFeatures()` function is the main workhorse of the `qFeature()` package. It combines the capability of `fitQ()` and `discFeatures()` in order to fit a moving window quadratic (or linear) regression model for each continuous variable in a data frame, and calculates summary statistics of the parameters. Additionally it calculates the duration and transition features of discrete variables.
 
 
 ####How to use getFeatures()
+At this point it is important that you understand what is happening in both the `fitQ()` and the `discFeatures()` functions, because `getFeatures()` is simply an aggregate of the two. Rather than dealing with a single vector at a time, this function is capable of dealing with a dataframe consisting of multiple continuous and/or discrete variables. The only additional functionality introduced by the `getFeatures()` function is the ability to output desired summary statistics of the features extracted from the regression models.
 
+Let's take a look at an example of the `getFeatures()` function. We begin by creating a data frame that consists of 2 continuous and 2 discrete state variables.
+
+```{r}
+require(qFeature)
+
+set.seed(10)
+cont1 <- rnorm(10,9,1)
+cont2 <- runif(10,0,10)
+disc1 <- discData <- c("T", "F", "F",
+                       "T", "T", "T",
+                       "F", "T", "F",
+                       "T")
+disc2 <- c("blue", "red", "yellow",
+           "yellow", "blue", "red",
+           "blue", "red", "yellow",
+           "blue")
+
+getFeaturesEx <- data.frame(cont1, cont2, disc1, disc2)
+getFeaturesEx
+```
+
+We learned earlier that `qFit()` could be used to handle a continuous vector and `discFeatures()` is able to extract information from the discrete state variable, but let's push the whole data frame into `getFeatures()`.
+
+``` {r}
+outGetFeatures <- getFeatures(getFeaturesEx, cont = 1:2, disc = 3:4, stats = c("mean", "sd"), fitQargs = list(x1 = -3:3))
+outGetFeatures
+```
+
+#####Continuous Case
+
+It should be apparent that this output is different than what you saw in `fitQ()` and that is because once you start looking across multiple variables it no longer makes sense to look at a long string of features. Instead we look at feature summary statistics.
+
+**[variable].[feature].[stat]**
+
+* __[variable]__ Identifies the continuous variable of interest from the data
+    * cont1
+    * cont2
+* __[feature]__ Identifies the feature
+    * a
+    * b
+    * c
+    * d
+* __[stat]__ identifies the summary statistic being applied to all values of the specified feature.
+    * mean
+    * sd
+
+ In our example we include mean and standard deviation for all the values extracted for that feature. There are many more summary statistics that could be included that are listed in the `getFeatures()` [help page](http://martingale.pnl.gov/computing/repos/html_help/qFeature/html/getFeatures.html "getFeatures() - R Help Page").
+
+#####Discrete Case
+
+The discrete variables are presented almost identically what we saw in the `discFeatures()` function. The only real difference here is that now we have a variable identifier to discriminate between discrete variables. Other than that we still have a summary of the percentage of time spent at each state as well as a count of each type of transition present in the data.
+
+**[variable].[frequency].[from]\_[to]**
+
+* __[variable]__ Identifies the discrete variable of interest from the data
+    * disc1
+    * disc2
+* __[frequency]__ Either the percent of time at a given state or a count of the transitions from one state to another.
+    * percent
+    * num_trans
+* __[from]__ Identifies the prior discrete state of the variable
+    * F/T
+    * red/blue/yellow
+* __[to]__ Identifies the posterior discrete state of the variable
+    * F/T
+    * red/blue/yellow
 
 
 ###[ddply_getFeatures()](http://martingale.pnl.gov/computing/repos/html_help/qFeature/html/ddply_getFeatures.html "ddply_getFeatures() - R Help Page")
 ####Description
-The `ddply_getFeatures()` function is simply a wrapper that allows the `getFeatures()` function to be implemented for each "group" or different value for a specified categorical variable in a dataframe using the `ddply()` function from the `plyr` package. The importance and implication of this wrapper is that it facilitates the leveraging of parallel processing.
+The `ddply_getFeatures()` function is simply a wrapper that allows the `getFeatures()` function to be implemented for each "group" or unique value for a specified categorical variable or combination of categorical variables in a dataframe using the `ddply()` function from the `plyr` package. 
+
+The importance of this wrapper is that it facilitates processing unique subsets in the data  and allows for parallel processing.
 
 ####How to use ddply_getFeatures()
 
+For this example let's use a dataset built into the `qFeature` package.
 
+``` {r}
+require(qFeature)
+data(demoData)
+str(demoData)
+```
 
+Now that we have a data set let's pretend we are interested in every combination of subject and phase. The output will be very similar to `getFeatures` however in this case instead of getting one value for each summary, we will end up with a set of values for each summary equal to the number of unique combinations. A quick calculation shows us that:
+
+$(\mbox{number of subjects}) \cdot (\mbox{number of phases}) = \mbox{number of combinations}$ 
+
+meaning that we will have:
+
+$(7) \cdot (3) = 21$ values for each output variable. 
+
+We can verify this by pushing our data into the `ddply_getFeatures()` function.
+
+```{r}
+f <- ddply_getFeatures(demoData, c("subject", "phase"),
+                       cont = 3:4, disc = 8, stats = c("mean", "sd"),
+                       fitQargs = list(x1 = -5:5), nJobs = 2)
+
+str(f)
+```
+
+If you need a reminder what all the variables being displayed are coming from, you can go ahead and read through the `getFeatures()` section above. We can clearly see that there are 21 values for each variable that correspond to the 21 combinations of subject and phase. Here is a quick look at the data.
+
+```{r}
+head(f)
+```
+
+Hopefully now you have the knowledge required to implement any of the core functions sucessfully in your own data set.

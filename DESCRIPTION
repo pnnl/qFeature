@@ -1,7 +1,7 @@
 Package: qFeature
 Title: Extract features from time series using moving windows of regression fits
-Version: 0.1.0
-Date: 2015-01-29
+Version: 0.1.1
+Date: 2015-02-12
 Author: Landon Sego
 Description: Extract features from time series using moving windows of
     regression fits for continuous variables and by summarizing the duration
@@ -10,6 +10,7 @@ Description: Extract features from time series using moving windows of
     Algorithms developed by Brett Amidan and Tom Ferryman.
 Maintainer: Landon Sego <Landon.Sego@pnl.gov>
 Imports:
+    Smisc,
     plyr,
     stats
 Suggests:
@@ -17,7 +18,6 @@ Suggests:
     foreach,
     doParallel,
     parallel,
-    Smisc,
     testthat
 License: LICENSE
 Packaged: 

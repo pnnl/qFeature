@@ -6,6 +6,11 @@
 ##'
 ##' A least one of \code{cont} or \code{disc} must be specified.
 ##'
+##' Instead of a data frame, the \code{y} argument can be a
+##' \code{valid_getFeatures_args} object (returned by \code{\link{check_getFeatures_args}}), in which
+##' case all the subsequent arguments to \code{getFeature} are ignored
+##' (because the \code{valid_getFeatures_args} object contains all those arguments).
+##' 
 ##' Parallel processing,
 ##' if requested via \code{nJobs > 1}, is facilitated via the 
 ##' \code{.parallel} argument of \code{\link[plyr:ddply]{plyr::ddply}}, which in turn
@@ -14,34 +19,14 @@
 ##' from the \pkg{parallel} package.
 ##' 
 ##' @export
-##' 
-##' @param x Data frame, each row containing a vector of measurements for a particular
-##' point in time, with columns indicating the measured variables (and possibly other
-##' descriptive variables).  The data processed presuming the rows are orderd
-##' chronologically.
 ##'
+##' @inheritParams check_getFeatures_args
+##' 
 ##' @param .variables  variables (i.e. columns) in \code{y} to split data frame by, input
 ##' as 'as.quoted' variables. These combinations of the variables uniquely identify
 ##' the groups for which the features will be separately extracted.  This is passed
 ##' directly to the argument of the same name in \code{\link[plyr:ddply]{plyr::ddply}}.
 ##' 
-##' @param cont Vector of integers or a character vector indicating the columns
-##' of \code{x} that correspond to continuous variables.  These are the variables from
-##' which features will be extracted by fitting the moving regression model using
-##' \code{\link{fitQ}}.
-##'
-##' @param disc Vector of integers or character vector indicating the columns
-##' of \code{x} that correspond to variables that will be treated as discrete. These are
-##' the variables from which features will be extracted using \code{\link{discFeatures}}.
-##'
-##' @param stats This argument defines the summary statistics that will be calculated
-##' for each of the regression parameters.  It can be a character vector of summary
-##' statistics, which are passed to \code{\link{summaryStats}}.  Or the function object
-##' returned by \code{\link{summaryStats}} may be supplied.
-##'
-##' @param fitQargs Named list of arguments for \code{\link{fitQ}}.  If \code{NULL}, the
-##' default arguments of \code{\link{fitQ}} are used.
-##'
 ##' @param nJobs The number of parallel jobs to run when extracting the features.
 ##'
 ##' @return A dataframe with one row for each grouping defined by \code{.variables}.
@@ -58,29 +43,49 @@
 ##'# "subject" and "phase", calculate the mean and standard deviation summary
 ##'# statistics to summarize the coefficients of the quadratic model fits
 ##'f <- ddply_getFeatures(demoData, c("subject", "phase"),
-##'                       cont = 3:4, disc = 8:11, stats = c("mean", "sd", "skew"),
+##'                       cont = 3:4, disc = 8:9, stats = c("mean", "skew"),
 ##'                       fitQargs = list(x1 = -5:5), nJobs = 2)
 ##'
 ##'str(f)
 ##'head(f)
 
-ddply_getFeatures <- function(y, .variables, cont = NULL, disc = NULL, 
+ddply_getFeatures <- function(y, .variables, cont = NULL, disc = NULL, centerScale = TRUE,
                               stats = c("min", "q1", "mean", "med", "q3",
                                         "max", "sd", "count"),
                               fitQargs = NULL, nJobs = 1) {
 
-  # Variable checking
-  v <- checkInputs(y, cont, disc, stats, fitQargs)
+  # Check whether y is a 'valid_getFeatures_args' object.  If not, check the args
+  if (!inherits(y, "valid_getFeatures_args")) {
+      
+    y <- check_getFeatures_args(y, cont = cont, disc = disc, centerScale = centerScale,
+                                stats = stats, fitQargs = fitQargs)
+    
+  }
 
-  # Check the nJobs argument
+  # Check the nJobs argument,  I assume .variables is checked by ddply
   stopifnot(is.numeric(nJobs),
             nJobs %% 1 == 0,
             nJobs >= 1)
+
+  # Get all the args that are not the data
+  allArgs <- y[names(y) != "y"]
+ 
+  # Construct a getFeatures wrapper suitable for ddply in order to handle the argument checking
+  # performed by check_getFeatures_args
+  getFeaturesW <- function(ySub, allArgs = NULL) {
+
+    # Construct a 'valid_getFeatures_args' object to pass into getFeatures()
+    yIn <- c(list(y = ySub), allArgs)
+    class(yIn) <- c("valid_getFeatures_args", "list")
+
+    return(getFeatures(yIn))
+      
+  } # getFeaturesW
   
   # Parallel processing
   if (nJobs > 1) {
 
-    # Load the requiste namespaces
+    # Load the requisite namespaces
     loadNamespace("parallel")
 
     willStop <- FALSE
@@ -105,9 +110,7 @@ ddply_getFeatures <- function(y, .variables, cont = NULL, disc = NULL,
     # The warning collection is needed due to an outstanding (and innocuous) issue with
     # plyr that only occurs when the function is called in parallel.
     # See https://github.com/hadley/plyr/issues/203
-    o <- tryCatchWE(plyr::ddply(y, .variables, getFeatures, cont = v$cont,
-                                disc = v$disc, stats = v$stats,
-                                fitQargs = fitQargs, .parallel = TRUE))
+    o <- tryCatchWE(plyr::ddply(y$y, .variables, getFeaturesW, allArgs = allArgs, .parallel = TRUE))
 
     # Shut down the cluster
     parallel::stopCluster(cl)
@@ -144,8 +147,7 @@ ddply_getFeatures <- function(y, .variables, cont = NULL, disc = NULL,
   # Non-parallel processing
   else {
 
-    o <- plyr::ddply(y, .variables, getFeatures, cont = v$cont, disc = v$disc,
-                     stats = v$stats, fitQargs = fitQargs)
+    o <- plyr::ddply(y$y, .variables, getFeaturesW, allArgs = allArgs)
       
   }
 

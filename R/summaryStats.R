@@ -28,8 +28,8 @@
 ##' @param stats A character vector of summary statistics.  See details for acceptable
 ##' values.
 ##'
-##' @return A function that takes a single argument of a numerical vector, and returns
-##' a named vector of the summary statistics of that vector
+##' @return A function of class \code{summaryStats_function} that takes a single argument of a
+##' numerical vector, and returns a named vector of the summary statistics of that vector
 ##'
 ##' @author Landon Sego
 ##' 
@@ -74,7 +74,6 @@ summaryStats <- function(stats) {
            "kurt"  = "\n  kurt = sp.kurtosis(x),")
   } # sw
   
-
   # Create the function to calculate the named vector of summary stats
   fText <- paste("function(x) { c(",
                  paste(unlist(lapply(stats, sw)), collapse = ""),
@@ -84,7 +83,9 @@ summaryStats <- function(stats) {
   fText <- sub("),)\n}",  "))\n}", fText, fixed = TRUE)
 
   # Create the function
-  return(eval(parse(text = fText)))
+  f <- eval(parse(text = fText))
+  class(f) <- c("summaryStats_function", class(f))
+  return(f)
   
 } # summaryStats
 

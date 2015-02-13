@@ -41,24 +41,18 @@
 ##' The handling of the moving windows and missing values in this function is
 ##' very similar to \code{\link[Smisc:smartFilter]{Smisc::smartFilter}}.  
 ##'
-##' @export
+##' Instead of a numeric vector, the \code{x1} argument can be a
+##' \code{valid_fitQ_args} object (returned by \code{\link{check_fitQ_args}}), in which
+##' case all the subsequent arguments to \code{fitQ} are ignored
+##' (because the \code{valid_fitQ_args} object contains all those arguments). This is useful
+##' because \code{fitQ} is called repeatedly by \code{\link{getFeatues}} over the same set of
+##' argument values.
 ##' 
+##' @export
+##'
 ##' @param y A numeric vector
 ##' 
-##' @param x1 The predictor of the regression model, whose length must
-##' be odd, and it must be monotonic (increasing or decreasing).  Typically this
-##' would be an evenly spaced, increasing vector.
-##' 
-##' @param min.window The minimum number of non-missing data points in a window
-##' that are required to fit the regression model.
-##' 
-##' @param start The index of the center of the first window
-##' 
-##' @param skip The number of indexes to advance the center of the moving
-##' window each time the model is fit.
-##' 
-##' @param linear.only \code{=TRUE} fits a simple linear regression model with
-##' \code{x1} as the single predictor, instead of a quadratic regression model.
+##' @inheritParams check_fitQ_args
 ##' 
 ##' @return An object of class \code{fitQ}, which is list with
 ##' the 4 vectors that contain the results of the
@@ -163,7 +157,7 @@
 ## sum(!is.na(y[1:4]))
 
 ## # The second elements
-## # are \code{NA} because there are only 4 non-missing data points in the window that  is centered on the
+## # are \code{NA} because there are only 4 non-missing data points in the window that is centered on the
 ## # second element of y:
 ## sum(!is.na(y[1:5]))
 
@@ -175,67 +169,47 @@
 ## extract.lm(lm(y[1:6] ~ x1[2:7] + x2[2:7]))
 ## extract.fitQ(f, 3)
 
-
 fitQ <- function(y,
                  x1 = -10:10,
                  min.window = 5,
                  start = 1,
                  skip = 1,
-                 linear.only = FALSE,
-                 checkArgs = TRUE) {
+                 linear.only = FALSE) {
     
-#### Consolidating the checks here...
-    
+  # Check whether x1 is a 'valid_fitQ_args' object.  If not, check the args
+  if (inherits(x1, "valid_fitQ_args")) {
+    a <- x1
+  }
+  else {
+    a <- check_fitQ_args(x1 = x1, min.window = min.window, start = start,
+                         skip = skip, linear.only = linear.only)
+  }
+
+  # Checks on y that need to always be done
+  stopifnot(is.numeric(y),
+            is.vector(y),
+            length(y) > 3)
+  
+  # Number of elements in y
   n <- length(y)
 
-  # Basic checks
-  stopifnot(is.numeric(y),
-            is.numeric(x1),
-            is.numeric(min.window),
-            length(min.window) == 1,
-            min.window %% 1 == 0,
-            is.numeric(skip),
-            length(skip) == 1,
-            skip %% 1 == 0,
-            is.logical(linear.only))
-    
-  # Define the window bandwith (in terms of the number of data points)
-  bw <- length(x1) %/% 2
-
-  # Sanity checks
-  if (any(is.na(x1)))
-    stop("x1 has one or more missing values\n")
-  if (!(length(x1) %% 2))
-    stop("Length of x1 must be odd\n")
-  
-  # x1 should be monotonic
-  dx1 <- diff(x1)
-  
-  if (!(all(dx1 > 0) | all(dx1 < 0)))
-    stop("x1 is not monotonic\n")
-  if (start > n)
+  if (a$start > n) {
     stop("'start' must be <= 'length(y)'\n")
-  if (skip <= 0)
-    stop("'skip' must be > 0\n")
-  if (start > bw + 1)
-    warning("Since 'start' > (bandwidth + 1), part of the data at the beginning\n",
-            "  of the series will not be covered by a window\n")
-  if (skip > 2 * bw + 1)
-    warning("Since 'skip' > the window length, parts of the data throughout\n",
-            "  the series will not be covered by a window\n")
+  }
   
   # Index of window centers
-  win.centers <- seq(start, n, by = skip)
+  win.centers <- seq(a$start, n, by = a$skip)
   num.windows <- length(win.centers)
 
-  if (!linear.only) {
+  # Quadratic fit
+  if (!a$linear.only) {
 
     # Center the x1
-    mx1 <- mean(x1)
-    x1.c <- x1 - mx1
+    mx1 <- mean(a$x1)
+    x1.c <- a$x1 - mx1
     
     # Create quadratic predictor variable and center it
-    x2 <- x1.c^2
+    x2 <- x1.c ^ 2
     mx2 <- mean(x2)
     x2.c <- x2 - mx2
   
@@ -248,14 +222,14 @@ fitQ <- function(y,
               as.double(y),
               as.integer(!is.na(y)),
               as.integer(n),
-              as.double(x1),
+              as.double(a$x1),
               as.double(x1.c),
               as.double(x2.c),
               as.double(mx1),
               as.double(mx2),
               as.integer(orthog),
-              as.integer(bw),
-              as.integer(min.window),
+              as.integer(a$bw),
+              as.integer(a$min.window),
               as.integer(win.centers - 1),
               as.integer(num.windows),
               a = double(num.windows),
@@ -266,17 +240,18 @@ fitQ <- function(y,
 
   }
 
+  # Linear fit
   else {
     
     out1 <- .C("fitL",
                as.double(y),
                as.integer(!is.na(y)),
                as.integer(n),
-               as.double(x1),
-               as.double(mean(x1)),
-               as.double(t(x1) %*% x1),
-               as.integer(bw),
-               as.integer(min.window),
+               as.double(a$x1),
+               as.double(mean(a$x1)),
+               as.double(t(a$x1) %*% a$x1),
+               as.integer(a$bw),
+               as.integer(a$min.window),
                as.integer(win.centers - 1),
                as.integer(num.windows),
                a = double(num.windows),
@@ -314,7 +289,7 @@ summary.fitQ <- function(fitQ_object,
                                    "max", "sd", "count")) {
 
   # Create the summary stat function, unless it has been passed in
-  if (!is.function(stats)) {
+  if (!inherits(stats, "summaryStats_function")) {
     stats <- summaryStats(stats)
   }
 

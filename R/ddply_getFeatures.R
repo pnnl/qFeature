@@ -134,7 +134,7 @@ ddply_getFeatures <- function(y, .variables, cont = NULL, disc = NULL, centerSca
 
       # If there any warnings left, issue them
       if (length(o$warning)) {
-        lapply(o$warning, warning)
+        nothing <- lapply(o$warning, warning)
       }
       
     } # If there are warning messages

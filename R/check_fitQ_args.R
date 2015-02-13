@@ -24,7 +24,8 @@
 ##' @return An object of class \code{valid_fitQ_args} that can be passed to the \code{x1} argument
 ##' of \code{\link{fitQ}}. It is a list with the same
 ##' elements that were passed into the function: \code{x1}, \code{min.window}, \code{start},
-##' \code{skip}, \code{linear.only}, plus one more, the bandwidth (\code{bw}).
+##' \code{skip}, \code{linear.only}, plus one more, the bandwidth (\code{bw}), which is equal to
+##' \code{(length(x1) - 1) / 2}.
 ##' 
 ##' @author Landon Sego
 
@@ -68,12 +69,12 @@ check_fitQ_args <- function(x1 = -10:10,
 
   # Checks for start and skip
   if (start > bw + 1) {
-    warning("Since 'start' > (bandwidth + 1), part of the data at the beginning\n",
-            "  of the series will not be covered by a window\n")
+    warning("Since 'start' > (length(x1) + 1) / 2, part of the data at the beginning\n",
+            "  of the series will not be covered by a window")
   }
   if (skip > 2 * bw + 1) {
     warning("Since 'skip' > the window length, parts of the data throughout\n",
-            "  the series will not be covered by a window\n")
+            "  the series will not be covered by a window")
   }
 
   # Gather the output and assign a class

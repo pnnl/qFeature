@@ -27,7 +27,8 @@ window each time the model is fit.}
 An object of class \code{valid_fitQ_args} that can be passed to the \code{x1} argument
 of \code{\link{fitQ}}. It is a list with the same
 elements that were passed into the function: \code{x1}, \code{min.window}, \code{start},
-\code{skip}, \code{linear.only}, plus one more, the bandwidth (\code{bw}).
+\code{skip}, \code{linear.only}, plus one more, the bandwidth (\code{bw}), which is equal to
+\code{(length(x1) - 1) / 2}.
 }
 \description{
 Check and validate arguments for \code{\link{fitQ}} before they are used.

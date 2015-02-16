@@ -25,8 +25,8 @@ demoData <- function() {
                     contE = rbeta(n, 0.5, 0.5) * scaleFactor,
                     discA = sample(rep_len(1:4, n)),
                     discB = as.logical(rbinom(n, 1, runif(1, 0.3, 0.7))),
-                    discC = as.factor(sample(rep_len(letters[1:3], n))),
-                    discD = sample(rep_len(letters[1:3], n)),
+                    discC = as.factor(sample(rep_len(letters[10:12], n))),
+                    discD = sample(rep_len(letters[24:26], n)),
                     stringsAsFactors = FALSE)
    
     return(d)
@@ -35,13 +35,13 @@ demoData <- function() {
   
   
   # Basic Data set structure
-  ds <- expand.grid(subject = as.factor(1:7), phase = letters[1:3])
+  ds <- expand.grid(subject = as.factor(1:7), phase = letters[5:7])
+    
+  # Set the seed so results are repeatable
+  set.seed(893)
   
   # Add the number of observations for each
   ds$n <- pmax(15, rpois(nrow(ds), 30))
-
-  # Set the seed so results are repeatable
-  set.seed(893)
 
   # Generate the actual data
   for (i in 1:nrow(ds)) {

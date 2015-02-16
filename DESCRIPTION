@@ -1,8 +1,8 @@
 Package: qFeature
 Title: Extract features from time series using moving windows of regression fits
-Version: 0.1.1
-Date: 2015-02-12
-Author: Landon Sego
+Version: 0.1.2
+Date: 2015-02-16
+Author: Landon Sego, Lucas Tate
 Description: Extract features from time series using moving windows of
     regression fits for continuous variables and by summarizing the duration
     and transistion features of discrete variables. This is a high-speed

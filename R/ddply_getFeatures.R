@@ -123,11 +123,17 @@ ddply_getFeatures <- function(y, .variables, cont = NULL, disc = NULL, centerSca
     # Extract and remove bogus warnings
     if (!is.null(o$warning)) {
 
-      # The bogus warning
-      bogus <- c("<anonymous>: ... may be used in an incorrect context: '.fun(piece, ...)'\n")
-      
+      # Seemingly unique strings from the bogus warning
+      bogus1 <- c("<anonymous>: ... may be used in an incorrect context:")
+      bogus2 <- c(".fun(piece, ...)")
+
+      # Determine whether these strings are present in any warnings
+      vWarn <- function(x) {
+        return(!(grepl(bogus1, x, fixed = TRUE) & grepl(bogus2, x, fixed = TRUE)))
+      }
+
       # Identify the valid warnings
-      validWarnings <- unlist(lapply(o$warning, function(x) x$message != bogus))
+      validWarnings <- unlist(lapply(o$warning, vWarn))
 
       # Retain valid warnings
       o$warning <- o$warning[validWarnings]

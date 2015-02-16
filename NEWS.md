@@ -1,3 +1,11 @@
+Version 0.1.2, 2015-02-16
+-----------------------------------------------------------------------------------
+
+BUG FIXES
+
+- `plyr::ddply()` produces a bogus warning when run in parallel (see https://github.com/hadley/plyr/issues/203). 
+   Corrected the handling of these warnings so that they do not appear when using `ddply_getFeatures()` in parallel.
+
 Version 0.1.1, 2015-02-12
 -----------------------------------------------------------------------------------
 

@@ -22,7 +22,6 @@
 
 context("discFeatures() - Output Values")
 
-require(qFeature)
 test_that("disFeatures() correctly calculates duration at each phase and transitions", {
   
   phasePar <- c(rep(letters[4:6],2), rep(letters[6:5],3))

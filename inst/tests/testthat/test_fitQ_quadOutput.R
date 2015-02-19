@@ -23,7 +23,6 @@
 
 context("fitQ() - Quadratic Output Values")
 
-require(qFeature)
 test_that("fitQ() correctly calculates features", {
   
   #Data

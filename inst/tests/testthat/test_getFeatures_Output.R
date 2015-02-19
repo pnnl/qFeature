@@ -43,6 +43,7 @@ test_that("getFeatures() output has not changed from the archived output file", 
   
   #Calculate features using getFeatures()
   outgetFeatures <- getFeatures(getFeaturesEx, cont = 1:2, disc = 3:4, stats = c("mean", "sd"), fitQargs = list(x1 = -3:3))
+  #saveRDS(outgetFeatures, "C:/Users/tate109/Documents/Packages/qFeature/tests/testthat/validationData/getfeatures_ValidationData.rds")
   
   #Compare results of getFeatures() to validation data
   expect_that(outgetFeatures, equals_reference(file = "validationData/getfeatures_ValidationData.rds"))

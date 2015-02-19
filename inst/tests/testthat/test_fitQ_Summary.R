@@ -24,69 +24,66 @@ context("fitQ() - Summary Values")
 
 require(qFeature)
 
-test_that("fitQ() correctly calculates summary statistics of features", {
-  
-  #Data
-  set.seed(10)
-  yPar <- rnorm(10, 10, 1)
-  x1Par <- -3:3
-  minPar <- 4
-  
-  #Data frame to hold manual computation of features 
-  compQuadDF <- data.frame(compQuadA = numeric(), compQuadB = numeric(), compQuadC = numeric(), compQuadD = numeric())
-  
-  #Function to extract features from manual computations
-  compABCD <- function(compQuad) {
-    compQuadA <- summary(compQuad)$coefficients[1,1]
-    compQuadB <- summary(compQuad)$coefficients[2,1]
-    compQuadC <- summary(compQuad)$coefficients[3,1]
-    compQuadD <- mean(summary(compQuad)$sigma)
-    
-    return(c(compQuadA, compQuadB, compQuadC, compQuadD))
-  }
-  
-  #Function to calculate summary statistics for a vector
-  compSumStats <- function(x) {
-    return(c(min(x),
-             quantile(x)[2],
-             mean(x),
-             median(x),
-             quantile(x)[4],
-             max(x),
-             sd(x),
-             length(x)))
-  }
-  
-  #Manual computation for windows 1-3 (leading edge)
-  for(i in 1:3) {
-    compQuad <- lm(yPar[1:(i+3)] ~ x1Par[(5-i):7] + I(x1Par[(5-i):7]^2))    
-    compQuadDF[nrow(compQuadDF)+1,] <- compABCD(compQuad)
-  }
-  
-  #Manual computation for windows 4-7 (complete windows)
-  for(i in 1:4) {
-    compQuad <- lm(yPar[i:(i+6)] ~ x1Par + I(x1Par^2))
-    compQuadDF[nrow(compQuadDF)+1,] <- compABCD(compQuad)
-  }
-  
-  #Manual computation for windows 8-10 (trailing edge)
-  for(i in 1:3) {
-    compQuad <- lm(yPar[(i+4):10] ~ x1Par[1:(7-i)] + I(x1Par[1:(7-i)]^2))
-    compQuadDF[nrow(compQuadDF)+1,] <- compABCD(compQuad)
-  }
-  
-  #Compute summary statistics from manual computations
-  compSummary <- c(compSumStats(compQuadDF[,1]), 
-                   compSumStats(compQuadDF[,2]), 
-                   compSumStats(compQuadDF[,3]), 
-                   compSumStats(compQuadDF[,4]))
+#Data
+set.seed(10)
+yPar <- rnorm(10, 10, 1)
+x1Par <- -3:3
+minPar <- 4
 
-  #Use fitQ() to produce summary statistics across windows.
-  fitQSummary <- summary(fitQ(y = yPar, x1 = x1Par, min.window = minPar))
+#Data frame to hold manual computation of features 
+compQuadDF <- data.frame(compQuadA = numeric(), compQuadB = numeric(), compQuadC = numeric(), compQuadD = numeric())
+
+#Function to extract features from manual computations
+compABCD <- function(compQuad) {
+  compQuadA <- summary(compQuad)$coefficients[1,1]
+  compQuadB <- summary(compQuad)$coefficients[2,1]
+  compQuadC <- summary(compQuad)$coefficients[3,1]
+  compQuadD <- mean(summary(compQuad)$sigma)
   
-  #Compare manual computations to fitQ computations
-  for(i in 1:32) {
+  return(c(compQuadA, compQuadB, compQuadC, compQuadD))
+}
+
+#Function to calculate summary statistics for a vector
+compSumStats <- function(x) {
+  return(c(min(x),
+           quantile(x)[2],
+           mean(x),
+           median(x),
+           quantile(x)[4],
+           max(x),
+           sd(x),
+           length(x)))
+}
+
+#Manual computation for windows 1-3 (leading edge)
+for(i in 1:3) {
+  compQuad <- lm(yPar[1:(i+3)] ~ x1Par[(5-i):7] + I(x1Par[(5-i):7]^2))    
+  compQuadDF[nrow(compQuadDF)+1,] <- compABCD(compQuad)
+}
+
+#Manual computation for windows 4-7 (complete windows)
+for(i in 1:4) {
+  compQuad <- lm(yPar[i:(i+6)] ~ x1Par + I(x1Par^2))
+  compQuadDF[nrow(compQuadDF)+1,] <- compABCD(compQuad)
+}
+
+#Manual computation for windows 8-10 (trailing edge)
+for(i in 1:3) {
+  compQuad <- lm(yPar[(i+4):10] ~ x1Par[1:(7-i)] + I(x1Par[1:(7-i)]^2))
+  compQuadDF[nrow(compQuadDF)+1,] <- compABCD(compQuad)
+}
+
+#Compute summary statistics from manual computations
+compSummary <- c(compSumStats(compQuadDF[,1]), 
+                 compSumStats(compQuadDF[,2]), 
+                 compSumStats(compQuadDF[,3]), 
+                 compSumStats(compQuadDF[,4]))
+
+#Use fitQ() to produce summary statistics across windows.
+fitQSummary <- summary(fitQ(y = yPar, x1 = x1Par, min.window = minPar))
+
+for(i in 1:32) {
+  test_that(paste("fitQ() correctly calculates ", names(fitQSummary[i]), sep=""), {
     expect_that(as.numeric(fitQSummary[i]), equals(as.numeric(compSummary[i])))
-  }
-  
-})
+  })
+}

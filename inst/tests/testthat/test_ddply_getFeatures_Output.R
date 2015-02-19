@@ -24,7 +24,6 @@
 
 context("ddply_getFeatures() - Output Values")
 
-require(qFeature)
 test_that("ddply_getFeatures() output has not changed from the archived output file", {
   
   #Reproduceable data set
@@ -38,6 +37,7 @@ test_that("ddply_getFeatures() output has not changed from the archived output f
   disc3Element <- c("1", "2", "3")
   
   #Generate discrete vectors by sampling from discElements
+  set.seed(10)
   disc1 <- sample(disc1Element, 100, replace=TRUE)
   disc2 <- sample(disc2Element, 100, replace=TRUE)
   disc3 <- sample(disc3Element, 100, replace=TRUE)
@@ -51,6 +51,7 @@ test_that("ddply_getFeatures() output has not changed from the archived output f
                                            cont = 1:2, disc = 5, 
                                            stats = c("mean", "sd"), 
                                            fitQargs = list(x1 = -5:5), nJobs = 2)
+  #saveRDS(outddplyGetFeatures, "C:/Users/tate109/Documents/Packages/qFeature/tests/testthat/validationData/ddplygetfeatures_ValidationData.rds")
   
   #Compare results of getFeatures() to validation data
   expect_that(outddplyGetFeatures, equals_reference(file = "validationData/ddplygetfeatures_ValidationData.rds"))

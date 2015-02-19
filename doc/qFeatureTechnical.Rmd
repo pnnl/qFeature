@@ -12,7 +12,7 @@ output:
 <!---
 Author: Lucas Tate <lucas.tate@pnnl.gov>
 Created: Feb 02, 2015
-Last Updated: Feb 12, 2015
+Last Updated: Feb 19, 2015
 -->
 
 #qFeature
@@ -52,11 +52,12 @@ set.seed(9)
 
 foodweb(where="package:qFeature",
         border="#00CCFF", boxcolor = "#E6FAFF",
-        prune=c("ddply_getFeatures",
+        funs=c("ddply_getFeatures",
                 "getFeatures",
                 "discFeatures",
                 "fitQ"),
-        descendents=FALSE,
+        descendents = FALSE,
+        ancestors = FALSE,
         expand.xbox=1.2, expand.ybox=3,
         textcolor="black", cex=1, lwd=1)
 ```

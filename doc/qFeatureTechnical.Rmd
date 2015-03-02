@@ -72,7 +72,7 @@ Using `discFeatures()` is most easily demonstrated with a simple example. Let's 
 discData <- c("TRUE", "FALSE", "FALSE", NA, "TRUE", "TRUE", NA, NA, "TRUE", "FALSE", "TRUE", "FALSE", "TRUE")
 discData
 ```
-Now we have a small data set of length 13 that contains two discrete phases and 3 missing values stored as NA. Now if we apply the `discFeatures()` function to our dataset we can see what happens.
+Now we have a small data set of length 13 that contains two discrete phases (also called "grouping variables") and 3 missing values stored as NA. Now if we apply the `discFeatures()` function to our dataset we can see what happens.
 ```{r}
 require(qFeature)
 
@@ -299,7 +299,7 @@ data(demoData)
 str(demoData)
 ```
 
-Now that we have a data set let's pretend we are interested in every combination of subject and phase. At this point it is important to note that in order to work properly, the package expects the data it is working with to be structured in several ways.  First,it is essential that any data set being processed by this package contain a field which indicating to which phase each record belongs. Second, the package assumes that the user's data is presented in chronological order (from oldest to newest) throughout each phase.  Once you've ensured that your data is structured, you can then proceed to process it through the `ddply_getFeatures` function. The output will be very similar to `getFeatures` however in this case instead of getting one value for each summary, we will end up with a set of values for each summary equal to the number of unique combinations. A quick calculation shows us that:
+Now that we have a data set let's pretend we are interested in every combination of subject and phase. At this point it is important to note that in order to work properly, the package expects the data it is working with to be structured in several ways.  First,it is essential that any data set being processed by this package contain a field which indicating to which grouping variable each record is associated. Second, the package assumes that the user's data is presented in chronological order (from oldest to newest) throughout each grouping variable.  Once you've ensured that your data is structured, you can then proceed to process it through the `ddply_getFeatures` function. The output will be very similar to `getFeatures` however in this case instead of getting one value for each summary, we will end up with a set of values for each summary equal to the number of unique combinations. A quick calculation shows us that:
 
 $(\mbox{number of subjects}) \cdot (\mbox{number of phases}) = \mbox{number of combinations}$ 
 

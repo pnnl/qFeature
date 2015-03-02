@@ -16,7 +16,7 @@ Last Updated: Feb 19, 2015
 -->
 
 #qFeature
-The goal of this guide is to be used as a quick start guide for using `qFeature`package. This guide begins with a quick installation guide in 'Getting Started'. Following installation is a very basic diagram of the 'Package Structure' to illustrate the heirarchy of functions. Finally, this document finishes off by providing details on using the 4 'Core Functions' contained within the package complete with follow-along examples. An additional vignette titled "Ryan's Shnazzy Vignette" by Ryan Butner provides more detailed on information on how to take the information extracted by this package and utilize it for anlysis.
+The goal of this guide is to be used as a quick start guide for using `qFeature`package. This guide begins with a quick installation guide in 'Getting Started'. Following installation is a very basic diagram of the 'Package Structure' to illustrate the heirarchy of functions. Finally, this document finishes off by providing details on using the 4 'Core Functions' contained within the package complete with follow-along examples.
 
 ##Description
 The `qFeature` package written by Landon Sego is designed to produce a multivariate signature from continuous and discrete variables contained within a time series dataset. This is a high-speed implementation of the feature extraction methods of the Morning Report Algorithms developed by Brett Amidan and Tom Ferryman.
@@ -299,7 +299,7 @@ data(demoData)
 str(demoData)
 ```
 
-Now that we have a data set let's pretend we are interested in every combination of subject and phase. The output will be very similar to `getFeatures` however in this case instead of getting one value for each summary, we will end up with a set of values for each summary equal to the number of unique combinations. A quick calculation shows us that:
+Now that we have a data set let's pretend we are interested in every combination of subject and phase. At this point it is important to note that in order to work properly, the package expects the data it is working with to be structured in several ways.  First,it is essential that any data set being processed by this package contain a field which indicating to which phase each record belongs. Second, the package assumes that the user's data is presented in chronological order (from oldest to newest) throughout each phase.  Once you've ensured that your data is structured, you can then proceed to process it through the `ddply_getFeatures` function. The output will be very similar to `getFeatures` however in this case instead of getting one value for each summary, we will end up with a set of values for each summary equal to the number of unique combinations. A quick calculation shows us that:
 
 $(\mbox{number of subjects}) \cdot (\mbox{number of phases}) = \mbox{number of combinations}$ 
 
@@ -317,10 +317,10 @@ f <- ddply_getFeatures(demoData, c("subject", "phase"),
 str(f)
 ```
 
-If you need a reminder what all the variables being displayed are coming from, you can go ahead and read through the `getFeatures()` section above. We can clearly see that there are 21 values for each variable that correspond to the 21 combinations of subject and phase. Here is a quick look at the data.
+If you need a reminder what all the variables being displayed are coming from, you can go ahead and read through the `getFeatures()` section above. We can clearly see that there are 21 values for each variable that correspond to the 21 combinations of subject and phase. Here is a quick look at the data. 
 
 ```{r}
 head(f)
 ```
 
-Hopefully now you have the knowledge required to implement any of the core functions sucessfully in your own data set.
+Hopefully now you have the knowledge required to implement any of the core functions sucessfully in your own data set.  As you use the package, bear in mind that the end output of `qFeature` does not need to be the final analytical product in all applications, but may also be used as an exploratory analytical product that can be used in subsequent analysis to either better understand the structure of the data itself, or to identify anomalous records. This can entail almost anything from Principal Component Analysis, to plotting the output of `qFeature` in a standard line or scatter plot, or any other visualization the user prefers.    

@@ -60,7 +60,7 @@ Last Updated: Feb 19, 2015
 
 <div id="qfeature" class="section level1">
 <h1>qFeature</h1>
-<p>The goal of this guide is to be used as a quick start guide for using <code>qFeature</code>package. This guide begins with a quick installation guide in ‘Getting Started’. Following installation is a very basic diagram of the ‘Package Structure’ to illustrate the heirarchy of functions. Finally, this document finishes off by providing details on using the 4 ‘Core Functions’ contained within the package complete with follow-along examples. An additional vignette titled “Ryan’s Shnazzy Vignette” by Ryan Butner provides more detailed on information on how to take the information extracted by this package and utilize it for anlysis.</p>
+<p>The goal of this guide is to be used as a quick start guide for using <code>qFeature</code>package. This guide begins with a quick installation guide in ‘Getting Started’. Following installation is a very basic diagram of the ‘Package Structure’ to illustrate the heirarchy of functions. Finally, this document finishes off by providing details on using the 4 ‘Core Functions’ contained within the package complete with follow-along examples.</p>
 <div id="description" class="section level2">
 <h2>Description</h2>
 <p>The <code>qFeature</code> package written by Landon Sego is designed to produce a multivariate signature from continuous and discrete variables contained within a time series dataset. This is a high-speed implementation of the feature extraction methods of the Morning Report Algorithms developed by Brett Amidan and Tom Ferryman.</p>
@@ -90,7 +90,7 @@ help(package=qFeature)</code></pre>
 discData</code></pre>
 <pre><code>##  [1] &quot;TRUE&quot;  &quot;FALSE&quot; &quot;FALSE&quot; NA      &quot;TRUE&quot;  &quot;TRUE&quot;  NA      NA     
 ##  [9] &quot;TRUE&quot;  &quot;FALSE&quot; &quot;TRUE&quot;  &quot;FALSE&quot; &quot;TRUE&quot;</code></pre>
-<p>Now we have a small data set of length 13 that contains two discrete phases and 3 missing values stored as NA. Now if we apply the <code>discFeatures()</code> function to our dataset we can see what happens.</p>
+<p>Now we have a small data set of length 13 that contains two discrete phases (also called “grouping variables”) and 3 missing values stored as NA. Now if we apply the <code>discFeatures()</code> function to our dataset we can see what happens.</p>
 <pre class="r"><code>require(qFeature)
 
 discFeatures(discData)</code></pre>
@@ -403,7 +403,7 @@ str(demoData)</code></pre>
 ##  $ discB  : logi  FALSE FALSE FALSE TRUE FALSE TRUE ...
 ##  $ discC  : Factor w/ 3 levels &quot;a&quot;,&quot;b&quot;,&quot;c&quot;: 3 2 2 2 1 1 3 1 2 2 ...
 ##  $ discD  : chr  &quot;b&quot; &quot;a&quot; &quot;a&quot; &quot;a&quot; ...</code></pre>
-<p>Now that we have a data set let’s pretend we are interested in every combination of subject and phase. The output will be very similar to <code>getFeatures</code> however in this case instead of getting one value for each summary, we will end up with a set of values for each summary equal to the number of unique combinations. A quick calculation shows us that:</p>
+<p>Now that we have a data set let’s pretend we are interested in every combination of subject and phase. At this point it is important to note that in order to work properly, the package expects the data it is working with to be structured in several ways. First,it is essential that any data set being processed by this package contain a field which indicating to which grouping variable each record is associated. Second, the package assumes that the user’s data is presented in chronological order (from oldest to newest) throughout each grouping variable. Once you’ve ensured that your data is structured, you can then proceed to process it through the <code>ddply_getFeatures</code> function. The output will be very similar to <code>getFeatures</code> however in this case instead of getting one value for each summary, we will end up with a set of values for each summary equal to the number of unique combinations. A quick calculation shows us that:</p>
 <p><span class="math">\((\mbox{number of subjects}) \cdot (\mbox{number of phases}) = \mbox{number of combinations}\)</span></p>
 <p>meaning that we will have:</p>
 <p><span class="math">\((7) \cdot (3) = 21\)</span> values for each output variable.</p>
@@ -513,7 +513,7 @@ str(f)</code></pre>
 ## 4                   2
 ## 5                   1
 ## 6                   3</code></pre>
-<p>Hopefully now you have the knowledge required to implement any of the core functions sucessfully in your own data set.</p>
+<p>Hopefully now you have the knowledge required to implement any of the core functions sucessfully in your own data set. As you use the package, bear in mind that the end output of <code>qFeature</code> does not need to be the final analytical product in all applications, but may also be used as an exploratory analytical product that can be used in subsequent analysis to either better understand the structure of the data itself, or to identify anomalous records. This can entail almost anything from Principal Component Analysis, to plotting the output of <code>qFeature</code> in a standard line or scatter plot, or any other visualization the user prefers.</p>
 </div>
 </div>
 </div>

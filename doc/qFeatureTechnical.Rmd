@@ -13,51 +13,60 @@ output:
 Author: Lucas Tate <lucas.tate@pnnl.gov>
 Created: Feb 02, 2015
 Last Updated: Feb 19, 2015
+
+TODOS:  (Delete these when they are completed)
+1. Cite Amidan's paper in the first Description
+2. Change all martingale help links to point at the appropriate github links, which are still
+   to be determined.
+3. Verify 1st person is used throughout
+4. Spell check this Rmd file
 -->
 
 #qFeature
-The goal of this guide is to be used as a quick start guide for using `qFeature`package. This guide 
-begins with a quick installation guide in 'Getting Started'. Following installation is a very basic 
-diagram of the 'Package Structure' to illustrate the heirarchy of functions. Finally, this document 
-finishes off by providing details on using the 4 'Core Functions' contained within the package complete with follow-along examples.
+
+Lucas Tate, Landon Sego, Ryan Butner
+
+This guide is meant to provide a quick start for using `qFeature` package. We
+begin with installation instructions in 'Getting Started'. Following installation is a basic 
+diagram of the 'Package Structure' to illustrate the heirarchy of functions. Finally, we 
+conclude with details regarding the four 'Core Functions' contained within the package complete with follow-along examples.  
 
 ##Description
-The `qFeature` package written by Landon Sego is designed to produce a multivariate signature from 
-continuous and discrete variables contained within a time series dataset. This is a high-speed 
+The `qFeature` package written by Landon Sego is designed to produce a multivariate feature from 
+continuous and discrete variables contained within a time series dataset. These features can then be used as inputs to multivariate statistical procedures like clustering, dimensionality reduction, and classification. This is a high-speed 
 implementation of the feature extraction methods of the Morning Report Algorithms developed by Brett 
-Amidan and Tom Ferryman.
+Amidan and Tom Ferryman. [Cite Amidan Paper here]
 
 ##Getting Started
 
-This guide is structured with the assumption that you are beginning with a basic understanding of R, 
-and aims to provide an understandable blueprint for implementing the tools contained within the 
-`qFeature` package with your own data.
-
-The first thing you will need to do is install the `qFeature` package. You will need access to the 
-[martingale repository](http://martingale.pnl.gov/computing/repos/) in order to obtain the package. 
-After permissions for access have been granted, the package can then be installed by:
+The first thing you will need to do is install the `qFeature` package. 
 
 ```{r eval=FALSE}
-install.packages("qFeature", repos="http://martingale.pnl.gov/computing/repos")
+install.packages("devtools") # if not installed
+library(devtools)
+install_github("pnnl/qFeature")
 ```
 
 Once the package has been installed, the library can be loaded so that the functions can be used. A 
-complete list of the functions contained within the `calcIVT` package can be seen using:
+complete list of the functions contained within the `qFeature` package can be seen using:
 
 ```{r message=FALSE, echo=FALSE}
-require(qFeature)
+library(qFeature)
 options(scipen=999)
 ```
 ```{r eval=FALSE}
-require(qFeature)
+library(qFeature)
 help(package=qFeature)
 ```
 
 
 ##Package Structure
+In what follows, we explain the four core functions of `qFeature`:  `ddply_getFeatures()`,
+`getFeatures()`, `discFeatures()`, and `fitQ`.
+
 ```{r package_structure_plot, message=FALSE, warning=FALSE, echo=FALSE}
-require(qFeature)
-require(mvbutils)
+library(qFeature)
+library(mvbutils)
 
 set.seed(9)
 
@@ -76,7 +85,8 @@ foodweb(where="package:qFeature",
 ###[discFeatures()](http://martingale.pnl.gov/computing/repos/html_help/qFeature/html/discFeatures.html "discFeatures() - R Help Page")
 ####Description
 This function is intended for use on a time series variable with discrete states and calculates the 
-percentage of time spent at each of those states as well as counting the transitions in the variable.
+percentage of time spent at each of those states as well as counting the transitions in the variable
+from one state to another.
 
 ####How to use discFeatures()
 Using `discFeatures()` is most easily demonstrated with a simple example. Let's begin by creating a small dataset with 2 discrete states (TRUE/FALSE).
@@ -87,7 +97,7 @@ discData
 Now we have a small data set of length 13 that contains two discrete phases (also called "grouping 
 variables") and 3 missing values stored as NA. Now if we apply the `discFeatures()` function to our dataset we can see what happens.
 ```{r}
-require(qFeature)
+library(qFeature)
 
 discFeatures(discData)
 ```
@@ -134,7 +144,7 @@ and denoted as **a**, **b**, **c**, and **d** which are defined below.
 
 **d**: The root mean squared error (RMSE)
 
-The data moves through the window by an increment of `skip` which has a default of 1 and fits a model 
+The data moves through the window by an increment of `skip` which has a default of 1 and fits the regression model 
 using the data contained in each new window. This iterates over the entire vector of the response 
 measure in order to produce a signature of features with a corresponding **a**, **b**, **c**, and 
 **d** for each regression that was fit.
@@ -165,7 +175,7 @@ fitqDataEx1
 We now have a small vector of length 7 containing randomly generated numbers. Now we can pass the vector into our `fitQ()` function and take a look at the output.
 
 ```{r}
-require(qFeature)
+library(qFeature)
 fitQ(y = fitqDataEx1, x1 = -3:3, min.window = 4)
 ```
 
@@ -213,7 +223,7 @@ We now have a small vector of length 7 containing randomly generated numbers. No
 vector into our `fitQ()` function with a `min.window`=5 and see how the function responds.
 
 ```{r}
-require(qFeature)
+library(qFeature)
 fitQ(y = fitqDataEx2, x1 = -3:3, min.window = 5)
 ```
 
@@ -240,7 +250,7 @@ implement the function and see what happens.
 
 
 ```{r}
-require(qFeature)
+library(qFeature)
 fitQ(y = fitqDataEx3, x1 = -3:3, min.window = 4)
 ```
 
@@ -262,11 +272,9 @@ our feature extraction.
 ###[getFeatures()](http://martingale.pnl.gov/computing/repos/html_help/qFeature/html/getFeatures.html "getFeatures() - R Help Page")
 
 ####Description
-The `getFeatures()` function is the main workhorse of the `qFeature()` package. It combines the 
-capability of `fitQ()` and `discFeatures()` in order to fit a moving window quadratic (or linear) 
-regression model for each continuous variable in a data frame, and calculates summary statistics of 
-the parameters. Additionally it calculates the duration and transition features of discrete variables.
-
+The `getFeatures()` function is the main workhorse of the `qFeature()` package. It is called 
+against a data frame, where `fitQ()` is applied to the continous variables and `discFeatures()` is
+applied to the discrete (or categorical) variables.
 
 ####How to use getFeatures()
 At this point it is important that you understand what is happening in both the `fitQ()` and the 
@@ -280,7 +288,7 @@ Let's take a look at an example of the `getFeatures()` function. We begin by cre
 that consists of 2 continuous and 2 discrete state variables.
 
 ```{r}
-require(qFeature)
+library(qFeature)
 
 set.seed(10)
 cont1 <- rnorm(10,9,1)
@@ -360,10 +368,10 @@ state to another.
 ###[ddply_getFeatures()](http://martingale.pnl.gov/computing/repos/html_help/qFeature/html/ddply_getFeatures.html "ddply_getFeatures() - R Help Page")
 ####Description
 The `ddply_getFeatures()` function is simply a wrapper that allows the `getFeatures()` function to be 
-implemented for each "group" or unique value for a specified categorical variable or combination of 
-categorical variables in a dataframe using the `ddply()` function from the `plyr` package. 
+implemented for each "group" in a data frame, where the groups are defined by the unique combinations  of the values of one or more categorical variables.  The replication of `getFeatures()` for each group
+is carried out by `ddply()` from the `plyr` package. 
 
-The importance of this wrapper is that it facilitates processing unique subsets in the data  and 
+The importance of this wrapper is that it facilitates processing unique subsets in the data and 
 allows for parallel processing.
 
 ####How to use ddply_getFeatures()
@@ -371,7 +379,7 @@ allows for parallel processing.
 For this example let's use a dataset built into the `qFeature` package.
 
 ``` {r}
-require(qFeature)
+library(qFeature)
 data(demoData)
 str(demoData)
 ```
@@ -413,9 +421,7 @@ head(f)
 ```
 
 Hopefully now you have the knowledge required to implement any of the core functions sucessfully in 
-your own data set.  As you use the package, bear in mind that the end output of `qFeature` does not 
-need to be the final analytical product in all applications, but may also be used as an exploratory 
-analytical product that can be used in subsequent analysis to either better understand the structure 
-of the data itself, or to identify anomalous records. This can entail almost anything from Principal 
-Component Analysis, to plotting the output of `qFeature` in a standard line or scatter plot, or any 
-other visualization the user prefers.
+your own data set.  As you use the package, bear in mind that output from `qFeature` functions
+are features, or summary statistics, that contain information about the behavior of the time series.
+These features will likely need further graphical and statistical analysis, typically using
+multivariate statistical techniques like dimensionality reduction, clustering, and/or classification.

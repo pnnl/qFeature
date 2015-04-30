@@ -9,33 +9,33 @@ output:
   word_document: default
 ---
 
-<!---
+<!--
 Author: Lucas Tate <lucas.tate@pnnl.gov>
 Created: Feb 02, 2015
 Last Updated: Feb 19, 2015
 
 TODOS:  (Delete these when they are completed)
-1. Cite Amidan's paper in the first Description
-2. Change all martingale help links to point at the appropriate github links, which are still
-   to be determined.
-3. Verify 1st person is used throughout
-4. Spell check this Rmd file
+1. Uncomment function titles (discFeatures, fitQ, getFeatures, ddply_getFeatures) and link them to rendered help files on github.
+
 -->
 
 #qFeature
 
 Lucas Tate, Landon Sego, Ryan Butner
+\
+\
+
 
 This guide is meant to provide a quick start for using `qFeature` package. We
 begin with installation instructions in 'Getting Started'. Following installation is a basic 
-diagram of the 'Package Structure' to illustrate the heirarchy of functions. Finally, we 
+diagram of the 'Package Structure' to illustrate the hierarchy of functions. Finally, we 
 conclude with details regarding the four 'Core Functions' contained within the package complete with follow-along examples.  
 
 ##Description
 The `qFeature` package written by Landon Sego is designed to produce a multivariate feature from 
 continuous and discrete variables contained within a time series dataset. These features can then be used as inputs to multivariate statistical procedures like clustering, dimensionality reduction, and classification. This is a high-speed 
 implementation of the feature extraction methods of the Morning Report Algorithms developed by Brett 
-Amidan and Tom Ferryman. [Cite Amidan Paper here]
+Amidan and Tom Ferryman (Amidan and Ferryman 2005).
 
 ##Getting Started
 
@@ -82,7 +82,12 @@ foodweb(where="package:qFeature",
         textcolor="black", cex=1, lwd=1)
 ```
 
+###discFeatures()
+
+<!--
 ###[discFeatures()](http://martingale.pnl.gov/computing/repos/html_help/qFeature/html/discFeatures.html "discFeatures() - R Help Page")
+-->
+
 ####Description
 This function is intended for use on a time series variable with discrete states and calculates the 
 percentage of time spent at each of those states as well as counting the transitions in the variable
@@ -109,7 +114,11 @@ times and from TRUE to FALSE 3 times. Go ahead and count the transitions yoursel
 you agree with the output. The transitions have significance because this function is intended to be 
 used on time series data and so a transition from one state to another could be meaningful.
 
+###fitQ()
+
+<!--
 ###[fitQ()](http://martingale.pnl.gov/computing/repos/html_help/qFeature/html/fitQ.html "fitQ() - R Help Page")
+-->
 
 ####Description
 
@@ -184,7 +193,7 @@ extracted and the number of values should equal the length of the vector `y` (wh
 the center of the first window is on the first point and the center moves by an increment of `skip` 
 which has a default of 1 through the entire vector of `y`.
 
-Futhermore, the first values of **a**, **b**, **c**, and **d** are all drawn from the same window as 
+Furthermore, the first values of **a**, **b**, **c**, and **d** are all drawn from the same window as 
 are the second, third, and so on and so forth. We can illustrate this by manually fitting the 2nd 
 window and comparing the results. Realize at the second window fit there will only be 5 points that 
 fall inside the window and are fit to the regression, which can be seen in the illustration above. For 
@@ -265,21 +274,25 @@ Window8 <- fitqDataEx3[5:11]
 Window8
 ```
 
-As you can see, in the range of data points for both Window7 and Window8 we only have 3 non-missing 
+As you can see, in the range of data points for both `Window7` and `Window8` we only have 3 non-missing 
 data points which resulted in our inability to fit regressions and consequently produced NA values in 
 our feature extraction.
 
+###getFeatures()
+
+<!--
 ###[getFeatures()](http://martingale.pnl.gov/computing/repos/html_help/qFeature/html/getFeatures.html "getFeatures() - R Help Page")
+-->
 
 ####Description
 The `getFeatures()` function is the main workhorse of the `qFeature()` package. It is called 
-against a data frame, where `fitQ()` is applied to the continous variables and `discFeatures()` is
+against a data frame, where `fitQ()` is applied to the continuous variables and `discFeatures()` is
 applied to the discrete (or categorical) variables.
 
 ####How to use getFeatures()
 At this point it is important that you understand what is happening in both the `fitQ()` and the 
 `discFeatures()` functions, because `getFeatures()` is simply an aggregate of the two. Rather than 
-dealing with a single vector at a time, this function is capable of dealing with a dataframe 
+dealing with a single vector at a time, this function is capable of dealing with a data frame 
 consisting of multiple continuous and/or discrete variables. The only additional functionality 
 introduced by the `getFeatures()` function is the ability to output desired summary statistics of the 
 features extracted from the regression models.
@@ -364,8 +377,12 @@ state to another.
     * F/T
     * red/blue/yellow
 
+###ddply_getFeatures()
 
+<!--
 ###[ddply_getFeatures()](http://martingale.pnl.gov/computing/repos/html_help/qFeature/html/ddply_getFeatures.html "ddply_getFeatures() - R Help Page")
+-->
+
 ####Description
 The `ddply_getFeatures()` function is simply a wrapper that allows the `getFeatures()` function to be 
 implemented for each "group" in a data frame, where the groups are defined by the unique combinations  of the values of one or more categorical variables.  The replication of `getFeatures()` for each group
@@ -386,10 +403,10 @@ str(demoData)
 
 Now that we have a data set let's pretend we are interested in every combination of subject and phase. 
 At this point it is important to note that in order to work properly, the package expects the data it 
-is working with to be structured in several ways.  First,it is essential that any data set being 
+is working with to be structured in several ways. First, it is essential that any data set being 
 processed by this package contain a field which indicating to which grouping variable each record is 
-associated. Second, the package assumes that the user's data is presented in chronological order (from 
-oldest to newest) throughout each grouping variable.  Once you've ensured that your data is 
+associated. Second, the package assumes that your data is presented in chronological order (from 
+oldest to newest) throughout each grouping variable. Once you've ensured that your data is 
 structured, you can then proceed to process it through the `ddply_getFeatures` function. The output 
 will be very similar to `getFeatures` however in this case instead of getting one value for each 
 summary, we will end up with a set of values for each summary equal to the number of unique 
@@ -420,8 +437,13 @@ data.
 head(f)
 ```
 
-Hopefully now you have the knowledge required to implement any of the core functions sucessfully in 
+Hopefully now you have the knowledge required to implement any of the core functions successfully in 
 your own data set.  As you use the package, bear in mind that output from `qFeature` functions
 are features, or summary statistics, that contain information about the behavior of the time series.
 These features will likely need further graphical and statistical analysis, typically using
 multivariate statistical techniques like dimensionality reduction, clustering, and/or classification.
+
+
+##References
+Amidan, BG and TA Ferryman (2005). “Atypical Event and Typical Pattern Detection within Complex
+Systems.” IEEE Aerospace Conference Proceedings, March 2005.

@@ -59,49 +59,12 @@ check_getFeatures_args <- function(y, cont = NULL, disc = NULL, centerScale = TR
             length(centerScale) == 1)
 
   # alias for the column names
-  ny <- colnames(y)
+  colNames <- colnames(y)
 
-  # Checks for cont and disc
-  checks <- function(var) {
-
-    name <- deparse(substitute(var))
-    
-    if (!is.null(var)) {
-
-      if (!is.character(var)) {
-
-        if (!is.numeric(var)) {
-          stop("Non-character entries to '", name, "' must be numeric, indicating ",
-               "the column numbers of 'y'")
-        }
-
-        # Column numbers must be viable
-        if (!all(var %in% 1:length(ny))) {
-          stop("The following column indexes provided to '", name,
-               "' are outside the range of the columns of 'y': ",
-               paste(setdiff(var, 1:length(ny)), collapse = ", "))
-        }
-      
-        var <- ny[var]
-      
-      } # If it's not character
-
-      # If it is character, the names must be in the column names
-      else if (!all(var %in% ny)) {
-
-        stop("Invalid values for '", name, "':  '",
-             paste(setdiff(var, ny), sep = "', '"),
-             "' are not in the column names of 'y'")
-      }
-      
-    } # If it's not NULL
-
-    return(var)
-    
-  } # checks
-
-  cont <- checks(cont)
-  disc <- checks(disc)
+  # Verify the column names exist in the data and convert them to character string
+  # if numeric indexes were provided
+  cont <- Smisc::selectElements(cont, colNames)
+  disc <- Smisc::selectElements(disc, colNames)
 
   # Verify all variables specified by 'cont' are numeric or integer
   if (!is.null(cont)) {
@@ -118,10 +81,10 @@ check_getFeatures_args <- function(y, cont = NULL, disc = NULL, centerScale = TR
     scaled.y.cont <- as.data.frame(scale(Smisc::select(y, cont)))
 
     # bind them back into the original data frame
-    y <- cbind(Smisc::select(y, setdiff(ny, cont)), scaled.y.cont)
+    y <- cbind(Smisc::select(y, setdiff(colNames, cont)), scaled.y.cont)
 
     # Restore original order of columns
-    y <- Smisc::select(y, ny)
+    y <- Smisc::select(y, colNames)
     
   }
   

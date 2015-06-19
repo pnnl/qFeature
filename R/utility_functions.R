@@ -4,6 +4,7 @@
 ##' to return \code{NA} if all elements of \code{x} are \code{NA}.  The prefix 'sp' could
 ##' be thought of as 'special'. These are internal functions used by
 ##' \code{\link{summaryStats}}.
+##  but exported only for convenience.
 ##'
 ## @export sp.min sp.max sp.sum sp.count 
 ##' @rdname utility_functions

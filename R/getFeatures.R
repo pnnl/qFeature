@@ -30,7 +30,7 @@
 ##' data(demoData)
 ##' 
 ##' # Select a subset of thedata
-##' d <- demoData[demoData$subject == 3 & demoData$phase == "b",]
+##' d <- demoData[demoData$subject == 3 & demoData$phase == "f",]
 ##' colnames(d)
 ##' 
 ##' # Run over that subset

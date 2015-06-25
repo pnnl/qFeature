@@ -68,7 +68,7 @@ ddply_getFeatures <- function(y, .variables, cont = NULL, disc = NULL, centerSca
             nJobs >= 1)
 
   # Check the .variables argument
-  .variables <- Smisc::selectElements(.variables)
+  .variables <- Smisc::selectElements(.variables, colnames(y))
 
   # Get all the args that are not the data
   allArgs <- y[names(y) != "y"]

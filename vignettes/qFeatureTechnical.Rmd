@@ -1,4 +1,16 @@
 ---
+title: "qFeature"
+author: "Lucas Tate, Landon Sego, Ryan Burtner"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{qFeature}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<!--  The OLD stuff
+---
 output:
   html_document:
     highlight: textmate
@@ -9,7 +21,6 @@ output:
   word_document: default
 ---
 
-<!--
 Author: Lucas Tate <lucas.tate@pnnl.gov>
 Created: Feb 02, 2015
 Last Updated: Sep 02, 2015, by Landon Sego
@@ -18,13 +29,6 @@ TODOS:  (Delete these when they are completed)
 1. Uncomment function titles (discFeatures, fitQ, getFeatures, ddply_getFeatures) and link them to rendered help files on github.
 
 -->
-
-#qFeature
-
-Lucas Tate, Landon Sego, Ryan Butner
-\
-\
-
 
 This guide is meant to provide a quick start for using `qFeature` package. We
 begin with installation instructions in 'Getting Started'. Following installation is a basic 
@@ -84,6 +88,10 @@ foodweb(where="package:qFeature",
 
 ###discFeatures()
 
+<!--
+###[discFeatures()](http://github.com/pnnl/qFeature/html/discFeatures.html "discFeatures() - R Help Page")
+-->
+
 ####Description
 This function is intended for use on a time series variable with discrete states and calculates the 
 percentage of time spent at each of those states as well as counting the transitions in the variable
@@ -111,6 +119,10 @@ you agree with the output. The transitions have significance because this functi
 used on time series data and so a transition from one state to another could be meaningful.
 
 ###fitQ()
+
+<!--
+###[fitQ()](http://github.com/pnnl/qFeature/html/fitQ.html "fitQ() - R Help Page")
+-->
 
 ####Description
 
@@ -272,6 +284,10 @@ our feature extraction.
 
 ###getFeatures()
 
+<!--
+###[getFeatures()](http://github.com/pnnl/qFeature/html/getFeatures.html "getFeatures() - R Help Page")
+-->
+
 ####Description
 The `getFeatures()` function is the main workhorse of the `qFeature()` package. It is called 
 against a data frame, where `fitQ()` is applied to the continuous variables and `discFeatures()` is
@@ -340,6 +356,9 @@ features. Instead we look at feature summary statistics.
  In our example we include mean and standard deviation for all the values extracted for that feature. 
 There are many more summary statistics that could be included that are listed in the `getFeatures()` 
 help page.
+<!--
+[help page](http://github.com/pnnl/qFeature/html/getFeatures.html "getFeatures() - R Help Page").
+-->
 
 #####Discrete Case
 
@@ -366,6 +385,10 @@ state to another.
 
 ###ddply_getFeatures()
 
+
+<!--
+###[ddply_getFeatures()](http://github.com/pnnl/qFeature/html/ddply_getFeatures.html "ddply_getFeatures() - R Help Page")
+-->
 
 ####Description
 The `ddply_getFeatures()` function is simply a wrapper that allows the `getFeatures()` function to be 

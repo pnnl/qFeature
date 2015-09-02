@@ -1,0 +1,16 @@
+citHeader("To cite qFeature in publications use:")
+
+citEntry(entry = "Manual",
+  title        = "{qFeature:  Extract features from continuous or discrete time series}",
+  author       = personList(as.person("Landon H. Sego"),as.person("Lucas C. Tate")),
+  organization = "{Pacific Northwest National Laboratory}",
+  address      = "Richland, WA",
+  year         = "2015",
+  url          = "http://github.com/pnnl/qFeature",
+
+  textVersion  =
+  paste("Sego LH, Tate LC. 2015. qFeature:  Extract features from continuous or discrete time series",
+        "Pacific Northwest National Laboratory. http://github.com/pnnl/qFeature.")
+)
+
+

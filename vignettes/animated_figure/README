@@ -1,0 +1,14 @@
+From Lucas Tate, 9/2/2015
+
+I used third party software gimp (http://www.gimp.org/) to produce the animated gif in the vignette. 
+There are some tools in R for animation, but they weren’t flexible enough for what I needed. I started 
+with a loop that generated the plots, but after we iterated with some aesthetics I ended up producing 
+each of the plots separately and aggregating them using gimp.
+ 
+* plotGen1.R contains the code I used to generate the plots
+
+* testAnim1.gif is file that I posted to the web 
+
+And the following command is imbedded into the Rmd file:
+ 
+<center><img src="http://i.imgur.com/gcbiMWz.gif"></center>

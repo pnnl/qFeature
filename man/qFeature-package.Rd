@@ -4,25 +4,33 @@
 \name{qFeature-package}
 \alias{qFeature}
 \alias{qFeature-package}
-\title{Extract features from time series using moving windows of regression fits}
+\title{Extract features from continuous or discrete time series}
 \description{
-Extract features from time series using moving windows of regression fits.This is a
-high-speed implementation of the feature extraction methods of the
+Extract features from time series using moving windows of regression fits.
+This is a high-speed implementation of the feature extraction methods of the
 Morning Report Algorithms developed by Brett Amidan and Tom Ferryman.
 }
 \details{
 \tabular{ll}{
 Package: \tab qFeature\cr
 Type: \tab Package\cr
-Version: \tab 0.1.2\cr
-Date: \tab 2015-02-16\cr
+Version: \tab 0.1.3\cr
+Date: \tab 2015-09-02\cr
 License: \tab LICENSE\cr }
 }
 \examples{
+# Not run
+\dontrun{
 help(package = qFeature)
+browseVignettes("qFeature")
+}
 }
 \author{
-Landon Sego
+Landon Sego, Lucas Tate
+}
+\references{
+Amidan BG, Ferryman TA. 2005.  “Atypical Event and Typical Pattern Detection within Complex Systems.”
+IEEE Aerospace Conference Proceedings, March 2005.
 
 Maintainer: Landon Sego <Landon.Sego@pnnl.gov>
 }

@@ -63,7 +63,7 @@ in \code{\link{ddply_getFeatures}}.
 data(demoData)
 
 # Select a subset of thedata
-d <- demoData[demoData$subject == 3 & demoData$phase == "b",]
+d <- demoData[demoData$subject == 3 & demoData$phase == "f",]
 colnames(d)
 
 # Run over that subset
@@ -83,5 +83,9 @@ identical(features1, features)
 }
 \author{
 Landon Sego
+}
+\references{
+Amidan BG, Ferryman TA. 2005.  “Atypical Event and Typical Pattern Detection within Complex Systems.”
+IEEE Aerospace Conference Proceedings, March 2005.
 }
 

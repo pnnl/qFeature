@@ -1,25 +1,32 @@
-##' Extract features from time series using moving windows of regression fits
+##' Extract features from continuous or discrete time series
 ##' 
-##' Extract features from time series using moving windows of regression fits.This is a
-##' high-speed implementation of the feature extraction methods of the
+##' Extract features from time series using moving windows of regression fits.
+##' This is a high-speed implementation of the feature extraction methods of the
 ##' Morning Report Algorithms developed by Brett Amidan and Tom Ferryman.
 ##' 
 ##' \tabular{ll}{
 ##' Package: \tab qFeature\cr
 ##' Type: \tab Package\cr
-##' Version: \tab 0.1.2\cr
-##' Date: \tab 2015-02-16\cr
+##' Version: \tab 0.1.3\cr
+##' Date: \tab 2015-09-02\cr
 ##' License: \tab LICENSE\cr }
 ##' 
 ##' @name qFeature-package
 ##' @aliases qFeature
 ##' @useDynLib qFeature
 ##' @docType package
-##' @author Landon Sego
-##' 
+##' @author Landon Sego, Lucas Tate
+##'
 ##' Maintainer: Landon Sego <Landon.Sego@@pnnl.gov>
+##' 
+##' @references  Amidan BG, Ferryman TA. 2005.  “Atypical Event and Typical Pattern Detection within Complex Systems.”
+##' IEEE Aerospace Conference Proceedings, March 2005. 
+##' 
 ##' @keywords package
 ##'
 ##' @examples
+##' \dontrun{
 ##' help(package = qFeature)
+##' browseVignettes("qFeature")
+##' }
 NULL

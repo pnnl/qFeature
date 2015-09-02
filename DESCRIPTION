@@ -1,23 +1,26 @@
 Package: qFeature
-Title: Extract features from time series using moving windows of regression fits
-Version: 0.1.2
-Date: 2015-02-16
+Title: Extract features from continuous or discrete time series
+Version: 0.1.3
+Date: 2015-09-02
 Author: Landon Sego, Lucas Tate
 Description: Extract features from time series using moving windows of
     regression fits for continuous variables and by summarizing the duration
     and transistion features of discrete variables. This is a high-speed
     implementation of the feature extraction methods of the Morning Report
     Algorithms developed by Brett Amidan and Tom Ferryman.
-Maintainer: Landon Sego <Landon.Sego@pnl.gov>
-Imports:
+Maintainer: Landon Sego <Landon.Sego@pnnl.gov>
+Imports: 
     Smisc,
     plyr,
     stats
-Suggests:
+Suggests: 
     moments,
     foreach,
     doParallel,
     parallel,
-    testthat
+    testthat,
+    knitr,
+    mvbutils
 License: LICENSE
 Packaged: 
+VignetteBuilder: knitr

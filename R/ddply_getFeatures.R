@@ -34,6 +34,9 @@
 ##'
 ##' @author Landon Sego
 ##'
+##' @references  Amidan BG, Ferryman TA. 2005.  “Atypical Event and Typical Pattern Detection within Complex Systems.”
+##' IEEE Aerospace Conference Proceedings, March 2005. 
+##'
 ##' @examples
 ##'# Load the data
 ##'data(demoData)
@@ -68,7 +71,7 @@ ddply_getFeatures <- function(y, .variables, cont = NULL, disc = NULL, centerSca
             nJobs >= 1)
 
   # Check the .variables argument
-  .variables <- Smisc::selectElements(.variables, colnames(y))
+  .variables <- Smisc::selectElements(.variables, colnames(y$y))
 
   # Get all the args that are not the data
   allArgs <- y[names(y) != "y"]

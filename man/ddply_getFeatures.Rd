@@ -85,4 +85,8 @@ head(f)
 \author{
 Landon Sego
 }
+\references{
+Amidan BG, Ferryman TA. 2005.  “Atypical Event and Typical Pattern Detection within Complex Systems.”
+IEEE Aerospace Conference Proceedings, March 2005.
+}
 

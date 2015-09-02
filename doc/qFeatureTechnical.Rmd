@@ -12,7 +12,7 @@ output:
 <!--
 Author: Lucas Tate <lucas.tate@pnnl.gov>
 Created: Feb 02, 2015
-Last Updated: Feb 19, 2015
+Last Updated: Sep 02, 2015, by Landon Sego
 
 TODOS:  (Delete these when they are completed)
 1. Uncomment function titles (discFeatures, fitQ, getFeatures, ddply_getFeatures) and link them to rendered help files on github.
@@ -84,10 +84,6 @@ foodweb(where="package:qFeature",
 
 ###discFeatures()
 
-<!--
-###[discFeatures()](http://martingale.pnl.gov/computing/repos/html_help/qFeature/html/discFeatures.html "discFeatures() - R Help Page")
--->
-
 ####Description
 This function is intended for use on a time series variable with discrete states and calculates the 
 percentage of time spent at each of those states as well as counting the transitions in the variable
@@ -115,10 +111,6 @@ you agree with the output. The transitions have significance because this functi
 used on time series data and so a transition from one state to another could be meaningful.
 
 ###fitQ()
-
-<!--
-###[fitQ()](http://martingale.pnl.gov/computing/repos/html_help/qFeature/html/fitQ.html "fitQ() - R Help Page")
--->
 
 ####Description
 
@@ -280,10 +272,6 @@ our feature extraction.
 
 ###getFeatures()
 
-<!--
-###[getFeatures()](http://martingale.pnl.gov/computing/repos/html_help/qFeature/html/getFeatures.html "getFeatures() - R Help Page")
--->
-
 ####Description
 The `getFeatures()` function is the main workhorse of the `qFeature()` package. It is called 
 against a data frame, where `fitQ()` is applied to the continuous variables and `discFeatures()` is
@@ -351,8 +339,7 @@ features. Instead we look at feature summary statistics.
 
  In our example we include mean and standard deviation for all the values extracted for that feature. 
 There are many more summary statistics that could be included that are listed in the `getFeatures()` 
-[help page](http://martingale.pnl.gov/computing/repos/html_help/qFeature/html/getFeatures.html 
-"getFeatures() - R Help Page").
+help page.
 
 #####Discrete Case
 
@@ -379,9 +366,6 @@ state to another.
 
 ###ddply_getFeatures()
 
-<!--
-###[ddply_getFeatures()](http://martingale.pnl.gov/computing/repos/html_help/qFeature/html/ddply_getFeatures.html "ddply_getFeatures() - R Help Page")
--->
 
 ####Description
 The `ddply_getFeatures()` function is simply a wrapper that allows the `getFeatures()` function to be 
@@ -445,5 +429,5 @@ multivariate statistical techniques like dimensionality reduction, clustering, a
 
 
 ##References
-Amidan, BG and TA Ferryman (2005). “Atypical Event and Typical Pattern Detection within Complex
+Amidan BG, Ferryman TA. 2005. “Atypical Event and Typical Pattern Detection within Complex
 Systems.” IEEE Aerospace Conference Proceedings, March 2005.

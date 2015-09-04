@@ -1,6 +1,6 @@
 ---
 title: "qFeature"
-author: "Lucas Tate, Landon Sego, Ryan Burtner"
+author: "Lucas Tate, Landon Sego, Ryan Butner"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -43,37 +43,50 @@ Amidan and Tom Ferryman (Amidan and Ferryman 2005).
 
 ##Getting Started
 
-The first thing you will need to do is install the `qFeature` package. 
+The first thing you will need to do is install the `qFeature` package. Let's begin by first installing some
+other packages from CRAN that are imported or suggested by `qFeature`:
 
 ```{r eval=FALSE}
-install.packages("devtools") # if not installed
-library(devtools)
-install_github("pnnl/qFeature")
+# Install needed packages from CRAN
+install.packages(c("devtools", "plyr", "moments", "foreach", "doParallel", "knitr", "mvbutils"))
 ```
 
-Once the package has been installed, the library can be loaded so that the functions can be used. A 
-complete list of the functions contained within the `qFeature` package can be seen using:
+The final step is to install the `Smisc` and `qFeature` packages, currently availble from 
+the [PNNL github page](http://github.com/pnnl). A few notes about installation of these two packages:
 
-```{r message=FALSE, echo=FALSE}
-library(qFeature)
-options(scipen=999)
-```
+* The `qFeature` and `Smisc` packages contain C code that requires compilation
+* On a Mac, you'll need to install [Xcode](https://developer.apple.com/xcode/) if you don't already have it
+* On Windows, you'll need to install [R tools](http://cran.r-project.org/bin/windows/Rtools/)
+* On Linux, compilation should take place automatically  
+
 ```{r eval=FALSE}
-library(qFeature)
-help(package=qFeature)
+# Install the Smisc and qFeatures packages
+devtools::install_github("pnnl/Smisc")
+devtools::install_github("pnnl/qFeature")
 ```
 
-
+Once the package has been installed, the library can be loaded so that the functions can be used. 
+```{r message = FALSE}
+library(qFeature)
+```
+A complete list of the functions contained within the `qFeature` package can be seen using:
+```{r eval=FALSE}
+help(package = qFeature)
+```
+```{r echo = FALSE}
+# Set viewing options in the vignette
+options(scipen = 999)
+```
 ##Package Structure
 In what follows, we explain the four core functions of `qFeature`:  `ddply_getFeatures()`,
 `getFeatures()`, `discFeatures()`, and `fitQ`.
 
 ```{r package_structure_plot, message=FALSE, warning=FALSE, echo=FALSE}
-library(qFeature)
 library(mvbutils)
 
 set.seed(9)
 
+op <- options(warn = -1)
 foodweb(where="package:qFeature",
         border="#00CCFF", boxcolor = "#E6FAFF",
         funs=c("ddply_getFeatures",
@@ -84,6 +97,7 @@ foodweb(where="package:qFeature",
         ancestors = FALSE,
         expand.xbox=1.2, expand.ybox=3,
         textcolor="black", cex=1, lwd=1)
+options(op)
 ```
 
 ###discFeatures()
@@ -106,8 +120,6 @@ discData
 Now we have a small data set of length 13 that contains two discrete phases (also called "grouping 
 variables") and 3 missing values stored as NA. Now if we apply the `discFeatures()` function to our dataset we can see what happens.
 ```{r}
-library(qFeature)
-
 discFeatures(discData)
 ```
 
@@ -188,7 +200,6 @@ fitqDataEx1
 We now have a small vector of length 7 containing randomly generated numbers. Now we can pass the vector into our `fitQ()` function and take a look at the output.
 
 ```{r}
-library(qFeature)
 fitQ(y = fitqDataEx1, x1 = -3:3, min.window = 4)
 ```
 
@@ -212,10 +223,10 @@ summary(lm(y ~ x1 + I(x1^2)))
 
 As you can see (aside from rounding):
 
-* Coefficient estimate for the intercept equals to the second value of __a__
-* Coefficient estimate for x1 equals to the second value of __b__
-* Coefficient estimate of I(x1^2) equals to the second value of __c__
-* Residual standard error equals to the second value of __d__
+* Coefficient estimate for the intercept is equal to the second value of __a__
+* Coefficient estimate for x1 is equal to the second value of __b__
+* Coefficient estimate of I(x1^2) is equal to the second value of __c__
+* Residual standard error is equal to the second value of __d__
 
 
 Hopefully the first example helps to solidify how the feature extraction is being populated. Let's continue by taking a look at a few issues you might encounter.
@@ -236,7 +247,6 @@ We now have a small vector of length 7 containing randomly generated numbers. No
 vector into our `fitQ()` function with a `min.window`=5 and see how the function responds.
 
 ```{r}
-library(qFeature)
 fitQ(y = fitqDataEx2, x1 = -3:3, min.window = 5)
 ```
 
@@ -263,7 +273,6 @@ implement the function and see what happens.
 
 
 ```{r}
-library(qFeature)
 fitQ(y = fitqDataEx3, x1 = -3:3, min.window = 4)
 ```
 
@@ -305,8 +314,6 @@ Let's take a look at an example of the `getFeatures()` function. We begin by cre
 that consists of 2 continuous and 2 discrete state variables.
 
 ```{r}
-library(qFeature)
-
 set.seed(10)
 cont1 <- rnorm(10,9,1)
 cont2 <- runif(10,0,10)
@@ -403,7 +410,6 @@ allows for parallel processing.
 For this example let's use a dataset built into the `qFeature` package.
 
 ``` {r}
-library(qFeature)
 data(demoData)
 str(demoData)
 ```
@@ -452,5 +458,11 @@ multivariate statistical techniques like dimensionality reduction, clustering, a
 
 
 ##References
-Amidan BG, Ferryman TA. 2005. “Atypical Event and Typical Pattern Detection within Complex
-Systems.” IEEE Aerospace Conference Proceedings, March 2005.
+* Amidan BG, Ferryman TA. 2005. “Atypical Event and Typical Pattern Detection within Complex
+ Systems.” IEEE Aerospace Conference Proceedings, March 2005.
+
+* A mathematical description of the algorithms in `fitQ` and `discFeatures` is given in this file:
+**Explanation_of_qFeature_algorithms.pdf**, whose location you can find with following command in R:
+```{r, eval = FALSE}
+file.path(path.package("qFeature"), "doc", "Explanation_of_qFeature_algorithms.pdf")
+```

@@ -1,15 +1,3 @@
-# For R-2.14.0 and beyond
-## .onAttach <- function(libname, pkgname) {
-
-##   banner.text <- paste("\nWelcome to the calcIVT package. ",
-##                        "Technical documentation of the IVT algorithms can be found in\n",
-##                        path.package(package="calcIVT"),
-##                        "/doc/Description_of_enhanced_IVT_algorithms_2008-02-01.pdf.\n", sep="")
-
-##   packageStartupMessage(banner.text)
-  
-## }
-
 # This function would be called when namespace is unloaded (if it were not in the search path
 # because it had been loaded via loadNamespace("qFeature")
 .onUnload <- function(libpath) {
@@ -18,10 +6,12 @@
   
     confirm <- try(library.dynam.unload("qFeature", libpath), silent = TRUE)
     
-    if (class(confirm) != "try-error")
+    if (class(confirm) != "try-error") {
       cat("qFeature shared objects are unloaded\n")
-    else
+    }
+    else {
       cat(confirm,"\n")
+    }
   }
 }
 

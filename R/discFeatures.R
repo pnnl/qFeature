@@ -28,7 +28,7 @@
 ##' x <- c("a","a","a","b","b","a","a","c","c","b","b")
 ##' discFeatures(x)
 ##'
-##' discFeatures(c(T, F, F, T, F, F, F))
+##' discFeatures(c(TRUE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE))
 ##'
 ##' discFeatures(c(1, 1, 1, 2, 2))
 ##'

@@ -34,7 +34,7 @@
 ##'
 ##' @author Landon Sego
 ##'
-##' @references  Amidan BG, Ferryman TA. 2005.  “Atypical Event and Typical Pattern Detection within Complex Systems.”
+##' @references  Amidan BG, Ferryman TA. 2005.  "Atypical Event and Typical Pattern Detection within Complex Systems."
 ##' IEEE Aerospace Conference Proceedings, March 2005. 
 ##'
 ##' @examples
@@ -99,7 +99,7 @@ ddply_getFeatures <- function(y, .variables, cont = NULL, disc = NULL, centerSca
     if (!requireNamespace("doParallel", quietly = TRUE)) {
       willStop <- TRUE
     }
-    if (!require(foreach, quietly = TRUE)) {
+    if (!requireNamespace("foreach", quietly = TRUE)) {
       willStop <- TRUE
     }
 
@@ -126,7 +126,7 @@ ddply_getFeatures <- function(y, .variables, cont = NULL, disc = NULL, centerSca
       stop(o$value)
     }
     
-    # Extract and remove bogus warnings
+    # Extract and remove bogus warnings from the plyr package
     if (!is.null(o$warning)) {
 
       # Seemingly unique strings from the bogus warning

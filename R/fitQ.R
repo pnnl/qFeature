@@ -45,7 +45,7 @@
 ##' \code{valid_fitQ_args} object (returned by \code{\link{check_fitQ_args}}), in which
 ##' case all the subsequent arguments to \code{fitQ} are ignored
 ##' (because the \code{valid_fitQ_args} object contains all those arguments). This is useful
-##' because \code{fitQ} is called repeatedly by \code{\link{getFeatues}} over the same set of
+##' because \code{fitQ} is called repeatedly by \code{\link{getFeatures}} over the same set of
 ##' argument values.
 ##' 
 ##' @export
@@ -276,17 +276,22 @@ fitQ <- function(y,
 ##' named vector with summary statistics.  The names take the form [coefficient].[stat],
 ##' where the coefficient is one of "a", "b", "c", or "d", and the stat is the statistic
 ##' required in the \code{stats} argument of the \code{summary} method.
+##'
+##' @param object An object of class \code{fit} returned by \code{\link{fitQ}}.
 ##' 
 ##' @param stats A character vector of summary statistics that are valid for
 ##' \code{\link{summaryStats}}. Alternatively, the object returned by
 ##' \code{\link{summaryStats}} may also be supplied for this argument.
 ##'
+##' @param \dots Additional (unused) arguments required for consistency of S3 methods
+##'
 ##' @export
 
 # Summary method for fitQ
-summary.fitQ <- function(fitQ_object,
+summary.fitQ <- function(object,
                          stats = c("min", "q1", "mean", "med", "q3",
-                                   "max", "sd", "count")) {
+                                   "max", "sd", "count"),
+                         ...) {
 
   # Create the summary stat function, unless it has been passed in
   if (!inherits(stats, "summaryStats_function")) {
@@ -294,7 +299,7 @@ summary.fitQ <- function(fitQ_object,
   }
 
   # Calculate the summary statistics
-  out <- unlist(lapply(fitQ_object, stats))
+  out <- unlist(lapply(object, stats))
 
   return(out)
 

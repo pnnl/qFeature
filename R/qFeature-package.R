@@ -1,4 +1,4 @@
-##' Extract features from continuous or discrete time series
+##' Extract Features from Continuous or Discrete Time Series
 ##' 
 ##' Extract features from time series using moving windows of regression fits.
 ##' This is a high-speed implementation of the feature extraction methods of the
@@ -19,7 +19,7 @@
 ##'
 ##' Maintainer: Landon Sego <Landon.Sego@@pnnl.gov>
 ##' 
-##' @references  Amidan BG, Ferryman TA. 2005.  “Atypical Event and Typical Pattern Detection within Complex Systems.”
+##' @references  Amidan BG, Ferryman TA. 2005.  "Atypical Event and Typical Pattern Detection within Complex Systems."
 ##' IEEE Aerospace Conference Proceedings, March 2005. 
 ##' 
 ##' @keywords package

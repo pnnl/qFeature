@@ -8,8 +8,8 @@
 fitQ(y, x1 = -10:10, min.window = 5, start = 1, skip = 1,
   linear.only = FALSE)
 
-\method{summary}{fitQ}(fitQ_object, stats = c("min", "q1", "mean", "med",
-  "q3", "max", "sd", "count"))
+\method{summary}{fitQ}(object, stats = c("min", "q1", "mean", "med", "q3",
+  "max", "sd", "count"), ...)
 }
 \arguments{
 \item{y}{A numeric vector}
@@ -29,9 +29,13 @@ window each time the model is fit.}
 \item{linear.only}{\code{=TRUE} fits a simple linear regression model with
 \code{x1} as the single predictor, instead of a quadratic regression model.}
 
+\item{object}{An object of class \code{fit} returned by \code{\link{fitQ}}.}
+
 \item{stats}{A character vector of summary statistics that are valid for
 \code{\link{summaryStats}}. Alternatively, the object returned by
 \code{\link{summaryStats}} may also be supplied for this argument.}
+
+\item{\dots}{Additional (unused) arguments required for consistency of S3 methods}
 }
 \value{
 An object of class \code{fitQ}, which is list with
@@ -86,7 +90,7 @@ Instead of a numeric vector, the \code{x1} argument can be a
 \code{valid_fitQ_args} object (returned by \code{\link{check_fitQ_args}}), in which
 case all the subsequent arguments to \code{fitQ} are ignored
 (because the \code{valid_fitQ_args} object contains all those arguments). This is useful
-because \code{fitQ} is called repeatedly by \code{\link{getFeatues}} over the same set of
+because \code{fitQ} is called repeatedly by \code{\link{getFeatures}} over the same set of
 argument values.
 }
 \section{Methods (by generic)}{

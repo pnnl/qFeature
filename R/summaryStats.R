@@ -85,6 +85,7 @@ summaryStats <- function(stats) {
   # Create the function
   f <- eval(parse(text = fText))
   class(f) <- c("summaryStats_function", class(f))
+  
   return(f)
   
 } # summaryStats

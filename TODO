@@ -7,3 +7,5 @@
 
 4. Create a vignette
 
+5.  Move make.response.mat.R and fitQslow to R, include them in tests, don’t export them
+

@@ -10,7 +10,7 @@
 ##' \code{\link{fitQ}} except that it uses a slower algorithm that uses \code{\link{lm}}
 ##' for the model fit.
 ##'
-##' This function is for testing and validation only, and is not exported.
+##' This function is for testing and validation only and is not exported.
 ##'
 ##' @param y A numeric vector
 ##' @param x1 The linear predictor of a the regression model, whose length must
@@ -22,8 +22,8 @@
 ##' window each time the model is fit.
 ##' @param linear.only \code{=TRUE} fits a simple linear regression model with
 ##' \code{x1} as the single predictor, instead of a quadratic regression model.
-##' @return A list with the 4 component vectors that contain the results of the
-##' quadratic model fits.  \item{a}{The estimated intercepts} \item{b}{The
+##' @return A matrix with the 4 columns that contain the results of the
+##' quadratic model fits:  \item{a}{The estimated intercepts} \item{b}{The
 ##' estimated linear coefficients} \item{c}{The estimated quadratic
 ##' coefficients.  These are \code{NA} is \code{linear.only=TRUE}} \item{d}{The
 ##' root mean squared error (RMSE)}

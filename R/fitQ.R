@@ -79,7 +79,7 @@
 ##'summary(z, stats = c("count", "mean", "kurt"))
 ##'
 
-## Text and examples for the Appendix of the vignette
+## Text and examples that could be placed in another, more technical vignette
 
 ## # Now let's illustrate in greater detail how \code{fitQ} behaves:
 ## y <- rnorm(10)

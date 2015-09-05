@@ -25,8 +25,8 @@ window each time the model is fit.}
 \code{x1} as the single predictor, instead of a quadratic regression model.}
 }
 \value{
-A list with the 4 component vectors that contain the results of the
-quadratic model fits.  \item{a}{The estimated intercepts} \item{b}{The
+A matrix with the 4 columns that contain the results of the
+quadratic model fits:  \item{a}{The estimated intercepts} \item{b}{The
 estimated linear coefficients} \item{c}{The estimated quadratic
 coefficients.  These are \code{NA} is \code{linear.only=TRUE}} \item{d}{The
 root mean squared error (RMSE)}
@@ -38,7 +38,7 @@ order to check \code{\link{fitQ}}.  It is identical in every respect to
 for the model fit.
 }
 \details{
-This function is for testing and validation only, and is not exported.
+This function is for testing and validation only and is not exported.
 }
 \author{
 Landon Sego

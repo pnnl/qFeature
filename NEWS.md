@@ -1,9 +1,13 @@
-Version 0.1.3, 2015-09-02
+Version 0.1.3, 2015-09-04
 -----------------------------------------------------------------------------------
 
 FEATURES / CHANGES
 
-- Minor edits to make ready package for deployment to github and CRAN
+- Edits to make ready package for deployment to github and CRAN
+
+BUG FIXES 
+
+- `ddply_getFeatures()` was failing due to incorrect input to `Smisc::selectElements()`
 
 Version 0.1.2, 2015-02-16
 -----------------------------------------------------------------------------------

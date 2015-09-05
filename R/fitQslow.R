@@ -10,6 +10,8 @@
 ##' \code{\link{fitQ}} except that it uses a slower algorithm that uses \code{\link{lm}}
 ##' for the model fit.
 ##'
+##' This function is for testing and validation only, and is not exported.
+##'
 ##' @param y A numeric vector
 ##' @param x1 The linear predictor of a the regression model, whose length must
 ##' be odd, and it must be monotonic (increasing or decreasing).
@@ -28,7 +30,7 @@
 ##'
 ##' @author Landon Sego
 ##' @keywords misc
-fitQslow <- function(y, x1, min.window=5, start=1, skip=1, linear.only=FALSE) {
+fitQslow <- function(y, x1, min.window = 5, start = 1, skip = 1, linear.only = FALSE) {
 
   # y is the data vector
   # bw is the bandwidth

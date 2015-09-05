@@ -10,13 +10,16 @@
 ##' Near the beginning and end of the series, the moving window is padded with
 ##' \code{NA}'s as necessary.
 ##'
+##' This function is not exported and is used only by \code{\link{fitQslow}}, which,
+##' in turn, exists for validation of \code{\link{fitQ}}.
+##'
 ##' @param X The vector to be processed
 ##' @param bw The bandwidth of the moving window, where the length of the
 ##' moving window is \code{2*bw + 1}.
 ##' @return A matrix, where each column contains the elements of the
 ##' progressing moving window across \code{X}.
 ##' @author Landon Sego
-##' @seealso This function is used in \code{\link{calcIVTslow}}
+##' @seealso This function is used in \code{\link{fitQslow}}
 ##' @keywords misc
 ##' @examples
 ##' 

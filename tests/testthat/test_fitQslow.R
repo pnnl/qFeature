@@ -35,7 +35,8 @@ test_that("fitQ() produces equivalent results to fitQslow()", {
       result <- max(abs(fast - slow))
 
       # Verify that difference is within 10 decimal places of equality
-      # I used this instead of "expect_equal(fast, slow)" because I found it was behaving quite strangely
+      # I used this instead of "expect_equal(fast, slow)" because I found it was behaving quite strangely--not
+      # reporting the differences correctly
       expect_identical(round(result, 10), 0)
       
   } # tester
@@ -52,4 +53,4 @@ test_that("fitQ() produces equivalent results to fitQslow()", {
   tester(min.window = 7, start = 2, skip = 2, linear.only = TRUE)
   tester(min.window = 4, start = 3, skip = 3, linear.only = TRUE)  
 
-}
+})

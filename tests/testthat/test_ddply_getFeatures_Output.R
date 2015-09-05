@@ -28,16 +28,16 @@ test_that("ddply_getFeatures() output has not changed from the archived output f
   
   #Reproduceable data set
   set.seed(10)
-  cont1 <- rnorm(100,9,1)
-  cont2 <- runif(100,0,10)
+  cont1 <- stats::rnorm(100,9,1)
+  cont2 <- stats::runif(100,0,10)
   
   #String elements to sample from for producing discrete vectors
-  disc1Element <- c("T", "F")
+  disc1Element <- c(TRUE, FALSE)
   disc2Element <- c("red", "blue", "yellow")
   disc3Element <- c("1", "2", "3")
   
   #Generate discrete vectors by sampling from discElements
-  set.seed(10)
+
   disc1 <- sample(disc1Element, 100, replace=TRUE)
   disc2 <- sample(disc2Element, 100, replace=TRUE)
   disc3 <- sample(disc3Element, 100, replace=TRUE)
@@ -45,13 +45,13 @@ test_that("ddply_getFeatures() output has not changed from the archived output f
   #Combine vectors into dataset
   ddplyGetFeaturesEx <- data.frame(cont1, cont2, disc1, disc2, disc3)
   
-  
   #Calculate features using getFeatures()
   outddplyGetFeatures <- ddply_getFeatures(ddplyGetFeaturesEx, c("disc1", "disc2"),
                                            cont = 1:2, disc = 5, 
                                            stats = c("mean", "sd"), 
                                            fitQargs = list(x1 = -5:5), nJobs = 2)
-  #saveRDS(outddplyGetFeatures, "C:/Users/tate109/Documents/Packages/qFeature/tests/testthat/validationData/ddplygetfeatures_ValidationData.rds")
+  
+#  saveRDS(outddplyGetFeatures, "validationData/ddplygetfeatures_ValidationData.rds")
   
   #Compare results of getFeatures() to validation data
   expect_that(outddplyGetFeatures, equals_reference(file = "validationData/ddplygetfeatures_ValidationData.rds"))

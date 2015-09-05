@@ -24,26 +24,28 @@
 
 context("getFeatures() - Output Values")
 
-require(qFeature)
 test_that("getFeatures() output has not changed from the archived output file", {
   
   #Reproduceable data set
-  set.seed(10)
-  cont1 <- rnorm(10,9,1)
-  cont2 <- runif(10,0,10)
-  disc1 <- discData <- c("T", "F", "F",
-                         "T", "T", "T",
-                         "F", "T", "F",
-                         "T")
+  set.seed(15)
+  
+  cont1 <- stats::rnorm(10,9,1)
+  cont2 <- stats::runif(10,0,10)
+  disc1 <- discData <- c(TRUE, FALSE, FALSE,
+                         TRUE, TRUE, TRUE,
+                         FALSE, TRUE, FALSE,
+                         TRUE)
+  
   disc2 <- c("blue", "red", "yellow",
              "yellow", "blue", "red",
              "blue", "red", "yellow",
              "blue")
+  
   getFeaturesEx <- data.frame(cont1, cont2, disc1, disc2)
   
-  #Calculate features using getFeatures()
+  # Calculate features using getFeatures()
   outgetFeatures <- getFeatures(getFeaturesEx, cont = 1:2, disc = 3:4, stats = c("mean", "sd"), fitQargs = list(x1 = -3:3))
-  #saveRDS(outgetFeatures, "C:/Users/tate109/Documents/Packages/qFeature/tests/testthat/validationData/getfeatures_ValidationData.rds")
+  saveRDS(outgetFeatures, "validationData/getfeatures_ValidationData.rds")
   
   #Compare results of getFeatures() to validation data
   expect_that(outgetFeatures, equals_reference(file = "validationData/getfeatures_ValidationData.rds"))

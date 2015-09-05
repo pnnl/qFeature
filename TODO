@@ -1,11 +1,9 @@
-1. Remove / move duplicative error checking in C code. Comment it out and move to check_fitQ_args()
+1. Travis build CI tests.
 
-2. Travis build CI tests.
-
-3. Complete documentation.  Mention how orthogonal fits can be created
+2. Complete documentation.  Mention how orthogonal fits can be created
    with quadratic and that it will give the same result as linear.
 
-4. Vignette for understanding the way arguments to fitQ behave
+3. Vignette for understanding the way arguments to fitQ behave
 
 NOTE:  To run the tests, only this option currently works:
 

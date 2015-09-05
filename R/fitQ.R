@@ -193,8 +193,13 @@ fitQ <- function(y,
   # Number of elements in y
   n <- length(y)
 
+  # Checks that depend on y
   if (a$start > n) {
-    stop("'start' must be <= 'length(y)'\n")
+    stop("'start' must be <= 'length(y)'")
+  }
+
+  if (n < a$min.window) {
+    stop("'length(y)' must be >= 'min.window'")
   }
   
   # Index of window centers

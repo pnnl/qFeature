@@ -51,10 +51,23 @@ check_fitQ_args <- function(x1 = -10:10,
   
   # Sanity checks
   if (any(is.na(x1))) {
-    stop("x1 has one or more missing values\n")
+    stop("'x1' has one or more missing values")
   }
+  
+  if (length(x1) <= 2) {
+    stop("'x1' must have at least 3 elements")
+  }
+
   if (!(length(x1) %% 2)) {
-    stop("Length of x1 must be odd\n")
+    stop("Length of 'x1' must be odd")
+  }
+
+  if (min.window < 3) {
+    stop("'min.window' must be >= 3")
+  }
+
+  if (min.window > length(x1)) {
+    stop("'min.window' must be <= the length of 'x1'")
   }
 
   # Define the window bandwith (in terms of the number of data points)

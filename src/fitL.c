@@ -56,15 +56,15 @@ void fitL(double *y,   // The data array
 
            
 
-    // Sanity checks
-    if (bw < 1)
-      error("The bandwidth must be >= 1\n");
-    if (*mwin < 2)
-      error("The minimum number of non-missing data points in the window must be >= 2\n (since >= 2 points are required to fit a linear model)\n)");
-    if (*mwin > nw)
-      error("The minimum number of non-missing data points in the window\n  must be <= window length (2*bandwidth + 1)\n");
-    if (nn < *mwin)
-      error("The length of the data vector must be >= minimum number of\n  non-missing data points in the window\n");
+    // Sanity checks. These are now taken care of by check_fitQ_args() and fitQ().
+    /* if (bw < 1) */
+    /*   error("The bandwidth must be >= 1\n"); */
+    /* if (*mwin < 2) */
+    /*   error("The minimum number of non-missing data points in the window must be >= 2\n (since >= 2 points are required to fit a linear model)\n)"); */
+    /* if (*mwin > nw) */
+    /*   error("The minimum number of non-missing data points in the window\n  must be <= window length (2*bandwidth + 1)\n"); */
+    /* if (nn < *mwin) */
+    /*   error("The length of the data vector must be >= minimum number of\n  non-missing data points in the window\n"); */
 
     // Loop over the center of each window that will be grabbed from y
     for (win_i = 0; win_i < *numWin; win_i++) {

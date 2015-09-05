@@ -73,15 +73,15 @@ void fitQ(double *y,   // The data array
            det;          // Suppose Z were the model matrix and X is a partition of Z such that
                          // X = Z[2:3,2:3].  Then 'det' is the determinant of X'X.
 
-    // Sanity checks
-    if (bw < 1)
-      error("The bandwidth must be >= 1\n");
-    if (*mwin < 3)
-      error("The minimum number of non-missing data points in the window must be >= 3\n (since >= 3 points are required to fit a quadratic model)\n)");
-    if (*mwin > nw)
-      error("The minimum number of non-missing data points in the window\n  must be <= window length (2*bandwidth + 1)\n");
-    if (nn < *mwin)
-      error("The length of the data vector must be >= minimum number of\n  non-missing data points in the window\n");
+    // Sanity checks. These are now taken care of by check_fitQ_args() and fitQ().
+    /* if (bw < 1) */
+    /*   error("The bandwidth must be >= 1\n"); */
+    /* if (*mwin < 3) */
+    /*   error("The minimum number of non-missing data points in the window must be >= 3\n (since >= 3 points are required to fit a quadratic model)\n)"); */
+    /* if (*mwin > nw) */
+    /*   error("The minimum number of non-missing data points in the window\n  must be <= window length (2*bandwidth + 1)\n"); */
+    /* if (nn < *mwin) */
+    /*   error("The length of the data vector must be >= minimum number of\n  non-missing data points in the window\n"); */
 
     // Calculate Sum of x1^2, x2^2.  These are the only quanitites in the calculations
     // that don't depend on y (or on the missing values in y)

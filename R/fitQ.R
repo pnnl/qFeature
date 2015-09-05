@@ -279,19 +279,18 @@ fitQ <- function(y,
 ##'
 ##' @param object An object of class \code{fit} returned by \code{\link{fitQ}}.
 ##' 
+##' @param \dots Additional (unused) arguments required for consistency of S3 methods
+##' 
 ##' @param stats A character vector of summary statistics that are valid for
 ##' \code{\link{summaryStats}}. Alternatively, the object returned by
 ##' \code{\link{summaryStats}} may also be supplied for this argument.
 ##'
-##' @param \dots Additional (unused) arguments required for consistency of S3 methods
-##'
 ##' @export
 
 # Summary method for fitQ
-summary.fitQ <- function(object,
+summary.fitQ <- function(object, ...,
                          stats = c("min", "q1", "mean", "med", "q3",
-                                   "max", "sd", "count"),
-                         ...) {
+                                   "max", "sd", "count")) {
 
   # Create the summary stat function, unless it has been passed in
   if (!inherits(stats, "summaryStats_function")) {

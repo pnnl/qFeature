@@ -8,8 +8,8 @@
 fitQ(y, x1 = -10:10, min.window = 5, start = 1, skip = 1,
   linear.only = FALSE)
 
-\method{summary}{fitQ}(object, stats = c("min", "q1", "mean", "med", "q3",
-  "max", "sd", "count"), ...)
+\method{summary}{fitQ}(object, ..., stats = c("min", "q1", "mean", "med",
+  "q3", "max", "sd", "count"))
 }
 \arguments{
 \item{y}{A numeric vector}

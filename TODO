@@ -1,11 +1,20 @@
-1. Remove / move duplicative error chekcing in C code. Comment it out and move to check_fitQ_args()
+1. Remove / move duplicative error checking in C code. Comment it out and move to check_fitQ_args()
 
-2. Unit tests for each function, compatible with Travis build
+2. Travis build CI tests.
 
 3. Complete documentation.  Mention how orthogonal fits can be created
    with quadratic and that it will give the same result as linear.
 
-4. Create a vignette
+4. Vignette for understanding the way arguments to fitQ behave
 
-5.  Move make.response.mat.R and fitQslow to R, include them in tests, don’t export them
+NOTE:  To run the tests, only this option currently works:
+
+library(testthat)
+test_package("qFeature")
+
+Using R CMD CHECK or devtools::check("~/path_to_package/qFeature") gives an error, as described here:
+https://github.com/hadley/testthat/issues/86
+
+So, to run R CMD CHECK, we'll need to probably change the name of the tests/testthat.R file to something else so that it won't run.
+
 

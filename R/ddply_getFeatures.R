@@ -22,8 +22,8 @@
 ##'
 ##' @inheritParams check_getFeatures_args
 ##' 
-##' @param .variables  variables (i.e. columns) in \code{y} to split data frame by, input
-##' as 'as.quoted' variables. These combinations of the variables uniquely identify
+##' @param .variables character vector with variable names in \code{y} that will
+##' be used to split the data. These combinations of the variables uniquely identify
 ##' the groups for which the features will be separately extracted.  This is passed
 ##' directly to the argument of the same name in \code{\link[plyr:ddply]{plyr::ddply}}.
 ##' 

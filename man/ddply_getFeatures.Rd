@@ -11,11 +11,11 @@ ddply_getFeatures(y, .variables, cont = NULL, disc = NULL,
 }
 \arguments{
 \item{y}{Data frame, each row containing a vector of measurements for a particular point in time,
-with columns indicating the measured variables (and possibly other descriptive variables).  The
-data processed presuming the rows are orderd chronologically.}
+with columns indicating the discrete and/or continuous measured variables (and possibly other
+descriptive variables).  The data processed presuming the rows are orderd chronologically.}
 
-\item{.variables}{variables (i.e. columns) in \code{y} to split data frame by, input
-as 'as.quoted' variables. These combinations of the variables uniquely identify
+\item{.variables}{character vector with variable names in \code{y} that will
+be used to split the data. These combinations of the variables uniquely identify
 the groups for which the features will be separately extracted.  This is passed
 directly to the argument of the same name in \code{\link[plyr:ddply]{plyr::ddply}}.}
 

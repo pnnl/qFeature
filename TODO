@@ -1,9 +1,9 @@
-1. Travis build CI tests.
+1. Create README.md file at pacakge root
 
-2. Complete documentation.  Mention how orthogonal fits can be created
-   with quadratic and that it will give the same result as linear.
+2. Construct travis build tests (use http://github.com/tesseradata/datadr) as an example
 
-3. Vignette for understanding the way arguments to fitQ behave
+3. Publish the vignette and the help files (a la http://tessera.io/docs-datadr) to github
+
 
 NOTE:  To run the tests, only this option currently works:
 

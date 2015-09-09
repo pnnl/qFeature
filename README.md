@@ -20,7 +20,7 @@ The `Smisc` package (a dependency of `qFeature`) and `qFeature` itself contain C
 
 With the compilation tools in place, you can now install dependencies and the package itself 
 from [the PNNL github site](http://github.com/pnnl):
-.
+
     devtools::install_github("pnnl/Smisc")
     devtools::install_github("pnnl/qFeature")
 

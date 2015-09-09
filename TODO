@@ -2,6 +2,8 @@
 
 2. Publish the vignette and the help files (a la http://tessera.io/docs-datadr) to github
 
+3. Add a check to more rigorously test the arguments going into fitQ() from above (e.g. fitQargs = NULL, or passing in a list, etc.)
+
 
 NOTE:  To run the tests, only this option currently works:
 

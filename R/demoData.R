@@ -7,7 +7,7 @@
 ##' @format 'data.frame':	646 obs. of  11 variables.  See example below.
 ##' 
 ##' @keywords datasets
-##' 
+##'
 ##' @examples
 ##' data(demoData)
 ##' str(demoData)

@@ -1,3 +1,19 @@
+Version 0.1.4, 2015-09-09
+-----------------------------------------------------------------------------------
+
+FEATURES / CHANGES
+
+- Added `genDemoData()`, which can be called from other packages via the `qFeature`
+  namespace.
+
+- Added README.md 
+
+
+BUG FIXES
+
+- Corrected passing of `fitQ` arguments from higher-level arguments
+
+
 Version 0.1.3, 2015-09-04
 -----------------------------------------------------------------------------------
 

@@ -185,6 +185,9 @@ fitQ <- function(y,
                          skip = skip, linear.only = linear.only)
   }
 
+  # Add the bandwidth to the arguments
+  a$bw <- length(a$x1) %/% 2
+
   # Checks on y that need to always be done
   stopifnot(is.numeric(y),
             is.vector(y),

@@ -92,7 +92,7 @@ check_fitQ_args <- function(x1 = -10:10,
 
   # Gather the output and assign a class
   out <- list(x1 = x1, min.window = min.window, start = start,
-              skip = skip, linear.only = linear.only, bw = bw)
+              skip = skip, linear.only = linear.only)
 
   class(out) <- c("valid_fitQ_args", class(out))
 

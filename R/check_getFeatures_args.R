@@ -99,18 +99,24 @@ check_getFeatures_args <- function(y, cont = NULL, disc = NULL, centerScale = TR
     stopifnot(is.list(fitQargs))
 
     n.fitQargs <- names(fitQargs)
-    n.fitQ <- names(formals(fitQ))[-1]
+    n.fitQ <- names(formals(check_fitQ_args))
     
     if (!(all(n.fitQargs %in% n.fitQ))) {
       stop("'", paste(setdiff(n.fitQargs, n.fitQ), collapse = "', '"),
            "' are not valid arguments for fitQ()")
     }
 
-    # Call check_fitQ_args() 
-    fitQargs <- do.call(check_fitQ_args, fitQargs)
-    
+  }
+  # If fitQargs is NULL, then go with the defaults in check_fitQ_args()
+  else {
+
+    fitQargs <- as.list(formals(check_fitQ_args))
+
   }
 
+  # Call check_fitQ_args() 
+  fitQargs <- do.call(check_fitQ_args, fitQargs)
+  
   # Return the arguments
   out <- list(y = y, cont = cont, disc = disc, stats = stats, fitQargs = fitQargs)
   class(out) <- c("valid_getFeatures_args", class(out))

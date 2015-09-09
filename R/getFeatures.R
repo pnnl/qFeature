@@ -74,7 +74,7 @@ getFeatures <- function(y, cont = NULL, disc = NULL, centerScale = TRUE,
     # Calculate the quadratic features and resulting summary statistics for
     # a single continous variable
     calcCont <- function(x) {
-      return(summary(do.call(fitQ, list(y = y$y[,x], x1 = y$fitQargs)), stats = y$stats))
+      return(summary(do.call(fitQ, c(list(y = y$y[,x]), y$fitQargs)), stats = y$stats))
     }
     
     # Calculate the features for all continuous variables

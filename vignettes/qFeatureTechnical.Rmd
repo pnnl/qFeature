@@ -9,62 +9,29 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-<!--  The OLD stuff
----
-output:
-  html_document:
-    highlight: textmate
-    theme: default
-    toc: no
-  pdf_document:
-    highlight: default
-  word_document: default
----
-
-Author: Lucas Tate <lucas.tate@pnnl.gov>
-Created: Feb 02, 2015
-Last Updated: Sep 02, 2015, by Landon Sego
-
-TODOS:  (Delete these when they are completed)
-1. Uncomment function titles (discFeatures, fitQ, getFeatures, ddply_getFeatures) and link them to rendered help files on github.
-
+<!-- 
+Created: Feb 02, 2015 by Lucas Tate
+Last Updated: Sep 11, 2015, by Landon Sego
 -->
 
 This guide is meant to provide a quick start for using `qFeature` package. We
 begin with installation instructions in 'Getting Started'. Following installation is a basic 
 diagram of the 'Package Structure' to illustrate the hierarchy of functions. Finally, we 
-conclude with details regarding the four 'Core Functions' contained within the package complete with follow-along examples.  
+conclude with details regarding the four 'Core Functions' contained within the package complete 
+with follow-along examples.  
 
 ##Description
-The `qFeature` package written by Landon Sego is designed to produce a multivariate feature from 
-continuous and discrete variables contained within a time series dataset. These features can then be used as inputs to multivariate statistical procedures like clustering, dimensionality reduction, and classification. This is a high-speed 
+The `qFeature` package is designed to extract features from 
+continuous and discrete variables contained within a time series dataset. 
+These features can then be used as inputs to multivariate statistical procedures like clustering, 
+dimensionality reduction, and classification. This is a high-speed 
 implementation of the feature extraction methods of the Morning Report Algorithms developed by Brett 
 Amidan and Tom Ferryman (Amidan and Ferryman 2005).
 
 ##Getting Started
 
-The first thing you will need to do is install the `qFeature` package. Let's begin by first installing some
-other packages from CRAN that are imported or suggested by `qFeature`:
-
-```{r eval=FALSE}
-# Install needed packages from CRAN
-install.packages(c("devtools", "plyr", "moments", "foreach", "doParallel", "knitr", "mvbutils"))
-```
-
-The final step is to install the `Smisc` and `qFeature` packages, currently availble from 
-the [PNNL github page](http://github.com/pnnl). A few notes about installation of these two packages:
-
-* The `qFeature` and `Smisc` packages contain C code that requires compilation
-* On a Mac, you'll need to install [Xcode](https://developer.apple.com/xcode/) if you don't already have it
-* On Windows, you'll need to install [R tools](http://cran.r-project.org/bin/windows/Rtools/)
-* On Linux, compilation should take place automatically  
-
-```{r eval=FALSE}
-# Install the Smisc and qFeatures packages
-devtools::install_github("pnnl/Smisc")
-devtools::install_github("pnnl/qFeature")
-```
-
+The first thing you will need to do is install the `qFeature` package. Installation instructions are provided in the 
+[README.md](https://github.com/pnnl/qFeature) file of the package repository.
 Once the package has been installed, the library can be loaded so that the functions can be used. 
 ```{r message = FALSE}
 library(qFeature)
@@ -81,7 +48,7 @@ options(scipen = 999)
 In what follows, we explain the four core functions of `qFeature`:  `ddply_getFeatures()`,
 `getFeatures()`, `discFeatures()`, and `fitQ`.
 
-```{r package_structure_plot, message=FALSE, warning=FALSE, echo=FALSE}
+```{r package_structure_plot, message = FALSE, warning = FALSE, echo = FALSE}
 library(mvbutils)
 
 set.seed(9)
@@ -101,10 +68,6 @@ options(op)
 ```
 
 ###discFeatures()
-
-<!--
-###[discFeatures()](http://github.com/pnnl/qFeature/html/discFeatures.html "discFeatures() - R Help Page")
--->
 
 ####Description
 This function is intended for use on a time series variable with discrete states and calculates the 
@@ -131,10 +94,6 @@ you agree with the output. The transitions have significance because this functi
 used on time series data and so a transition from one state to another could be meaningful.
 
 ###fitQ()
-
-<!--
-###[fitQ()](http://github.com/pnnl/qFeature/html/fitQ.html "fitQ() - R Help Page")
--->
 
 ####Description
 
@@ -293,10 +252,6 @@ our feature extraction.
 
 ###getFeatures()
 
-<!--
-###[getFeatures()](http://github.com/pnnl/qFeature/html/getFeatures.html "getFeatures() - R Help Page")
--->
-
 ####Description
 The `getFeatures()` function is the main workhorse of the `qFeature()` package. It is called 
 against a data frame, where `fitQ()` is applied to the continuous variables and `discFeatures()` is
@@ -363,9 +318,6 @@ features. Instead we look at feature summary statistics.
  In our example we include mean and standard deviation for all the values extracted for that feature. 
 There are many more summary statistics that could be included that are listed in the `getFeatures()` 
 help page.
-<!--
-[help page](http://github.com/pnnl/qFeature/html/getFeatures.html "getFeatures() - R Help Page").
--->
 
 #####Discrete Case
 
@@ -391,11 +343,6 @@ state to another.
     * red/blue/yellow
 
 ###ddply_getFeatures()
-
-
-<!--
-###[ddply_getFeatures()](http://github.com/pnnl/qFeature/html/ddply_getFeatures.html "ddply_getFeatures() - R Help Page")
--->
 
 ####Description
 The `ddply_getFeatures()` function is simply a wrapper that allows the `getFeatures()` function to be 

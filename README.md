@@ -1,6 +1,8 @@
 ### qFeature
 
-An R package for extracting features from continuous or discrete time series.  `qFeature` constructs the features by using moving windows of regression fits for continuous variables and by summarizing the duration and transistion features of discrete variables. This is a high-speed implementation of the feature extraction methods of the Morning Report Algorithms developed by Brett Amidan and Tom Ferryman.
+An R package for extracting features from continuous or discrete time series.  These features can then be used as inputs to multivariate statistical procedures like clustering, dimensionality reduction, and classification. `qFeature` constructs the features by using moving windows of regression fits for continuous variables and by summarizing the duration and transistion features of discrete variables. This is a high-speed implementation of the feature extraction methods of the Morning Report Algorithms developed by Brett Amidan and Tom Ferryman.
+
+You can learn more about the algorithms of `qFeature` in the [vignette](http://pnnl.github.io/qFeature).
 
 #### Installation instructions
 
@@ -31,7 +33,11 @@ And a list of all the package functions can be found this way:
 
     help(package = qFeature)
     
-And citation information:
+And this will provide citation information:
 
     citation("qFeature")
 
+### Contributing
+
+We welcome contributions to this package.  Please follow [these steps](http://pnnl.github.io/qFeature/developerInstructions.html)
+when contributing.

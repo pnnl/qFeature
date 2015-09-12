@@ -1,12 +1,3 @@
-## ----eval=FALSE----------------------------------------------------------
-#  # Install needed packages from CRAN
-#  install.packages(c("devtools", "plyr", "moments", "foreach", "doParallel", "knitr", "mvbutils"))
-
-## ----eval=FALSE----------------------------------------------------------
-#  # Install the Smisc and qFeatures packages
-#  devtools::install_github("pnnl/Smisc")
-#  devtools::install_github("pnnl/qFeature")
-
 ## ----message = FALSE-----------------------------------------------------
 library(qFeature)
 
@@ -17,7 +8,7 @@ library(qFeature)
 # Set viewing options in the vignette
 options(scipen = 999)
 
-## ----package_structure_plot, message=FALSE, warning=FALSE, echo=FALSE----
+## ----package_structure_plot, message = FALSE, warning = FALSE, echo = FALSE----
 library(mvbutils)
 
 set.seed(9)

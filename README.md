@@ -39,5 +39,4 @@ And this will provide citation information:
 
 ### Contributing
 
-We welcome contributions to this package.  Please follow [these steps](http://pnnl.github.io/qFeature/developerInstructions.html)
-when contributing.
+We welcome contributions to this package.  Please follow [these steps](http://pnnl.github.io/prepPackage) when contributing.

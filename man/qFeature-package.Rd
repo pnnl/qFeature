@@ -14,8 +14,8 @@ Morning Report Algorithms developed by Brett Amidan and Tom Ferryman.
 \tabular{ll}{
 Package: \tab qFeature\cr
 Type: \tab Package\cr
-Version: \tab 0.1.4\cr
-Date: \tab 2015-09-09\cr
+Version: \tab 0.1.5\cr
+Date: \tab 2015-09-15\cr
 License: \tab file LICENSE\cr }
 }
 \examples{

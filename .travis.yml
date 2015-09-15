@@ -1,0 +1,32 @@
+language: r
+
+env:
+  global:
+    - _R_CHECK_FORCE_SUGGESTS_=FALSE
+
+r_binary_packages:
+  - moments
+  - foreach
+  - doParallel
+  - parallel
+  - testthat
+  - knitr
+  - mvbutils
+  - plyr
+  - stats
+  - roxygen2
+  
+r_github_packages:
+  - pnnl/Smisc
+
+branches:
+  only:
+    - master
+    - dev
+
+notifications:
+  email:
+    recipients:
+    - lucas.tate@pnnl.gov
+    on_success: change
+    on_failure: change

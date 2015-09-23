@@ -1,6 +1,4 @@
-1. Construct travis build tests (use http://github.com/tesseradata/datadr) as an example
-
-2. Add a check to more rigorously test the arguments going into fitQ() from above (e.g. fitQargs = NULL, or passing in a list, etc.)
+1. Add a check to more rigorously test the arguments going into fitQ() from above (e.g. fitQargs = NULL, or passing in a list, etc.)
 
 
 NOTE:  To run the tests, only this option currently works:

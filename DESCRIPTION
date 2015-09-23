@@ -1,7 +1,7 @@
 Package: qFeature
 Title: Extract Features from Continuous or Discrete Time Series
-Version: 0.1.4
-Date: 2015-09-09
+Version: 0.1.5
+Date: 2015-09-15
 Author: Landon Sego, Lucas Tate
 Description: Extract features from time series using moving windows of
     regression fits for continuous variables and by summarizing the duration

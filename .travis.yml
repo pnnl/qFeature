@@ -9,13 +9,13 @@ r_binary_packages:
   - moments
   - foreach
   - doParallel
-  - parallel
   - testthat
   - knitr
-  - mvbutils
   - plyr
-  - stats
   - roxygen2
+
+ r_packages:
+  - mvbutils
   
 r_github_packages:
   - pnnl/Smisc

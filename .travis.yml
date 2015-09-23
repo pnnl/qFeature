@@ -13,8 +13,8 @@ r_binary_packages:
   - knitr
   - plyr
   - roxygen2
-
- r_packages:
+  
+r_packages:
   - mvbutils
   
 r_github_packages:

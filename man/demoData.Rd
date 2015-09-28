@@ -12,7 +12,6 @@ Some fake demonstration data to illustrate the qFeature package
 data(demoData)
 str(demoData)
 head(demoData)
-rm(demoData, envir = .GlobalEnv)
 }
 \keyword{datasets}
 

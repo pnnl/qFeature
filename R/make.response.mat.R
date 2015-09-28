@@ -21,10 +21,8 @@
 ##' @author Landon Sego
 ##' @seealso This function is used in \code{\link{fitQslow}}
 ##' @keywords misc
-##' @examples
-##' 
-##' make.response.mat(rnorm(10), bw = 4)
-##' 
+## @examples
+## \dontrun{make.response.mat(rnorm(10), bw = 4)}
 
 make.response.mat <- function(X, bw = 5) {
 

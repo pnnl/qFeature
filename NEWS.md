@@ -4,6 +4,7 @@ Version 0.1.6, 2015-09-29
 FEATURES / CHANGES
 
 - Removed `genDemoData()`.  These data can be obtained using `data(demoData, package = "qFeature")`
+- Removed call to `make.response.mat()` in its example
 
 Version 0.1.5, 2015-09-15
 -----------------------------------------------------------------------------------

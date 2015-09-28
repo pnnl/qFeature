@@ -1,14 +1,1 @@
 1. Add a check to more rigorously test the arguments going into fitQ() from above (e.g. fitQargs = NULL, or passing in a list, etc.)
-
-
-NOTE:  To run the tests, only this option currently works:
-
-library(testthat)
-test_package("qFeature")
-
-Using R CMD CHECK or devtools::check("~/path_to_package/qFeature") gives an error, as described here:
-https://github.com/hadley/testthat/issues/86
-
-So, to run R CMD CHECK, we'll need to probably change the name of the tests/testthat.R file to something else so that it won't run.
-
-

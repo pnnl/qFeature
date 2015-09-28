@@ -1,3 +1,10 @@
+Version 0.1.6, 2015-09-29
+-----------------------------------------------------------------------------------
+
+FEATURES / CHANGES
+
+- Removed `genDemoData()`.  These data can be obtained using `data(demoData, package = "qFeature")`
+
 Version 0.1.5, 2015-09-15
 -----------------------------------------------------------------------------------
 

@@ -12,5 +12,4 @@
 ##' data(demoData)
 ##' str(demoData)
 ##' head(demoData)
-##' rm(demoData, envir = .GlobalEnv)
 NULL

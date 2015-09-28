@@ -26,9 +26,6 @@ Near the beginning and end of the series, the moving window is padded with
 This function is not exported and is used only by \code{\link{fitQslow}}, which,
 in turn, exists for validation of \code{\link{fitQ}}.
 }
-\examples{
-make.response.mat(rnorm(10), bw = 4)
-}
 \author{
 Landon Sego
 }

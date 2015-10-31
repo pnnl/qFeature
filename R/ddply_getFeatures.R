@@ -12,12 +12,9 @@
 ##' (because the \code{valid_getFeatures_args} object contains all those arguments).
 ##' 
 ##' Parallel processing,
-##' if requested via \code{nJobs > 1}, is facilitated via the 
-##' \code{.parallel} argument of \code{\link[plyr:ddply]{plyr::ddply}}, which in turn
-##' relies on \code{\link[foreach:foreach]{foreach::foreach}},
-##' \code{\link[doParallel:registerDoParallel]{doParallel::registerDoParallel}}, and various functions
-##' from the \pkg{parallel} package.
-##' 
+##' if requested via \code{nJobs > 1}, is facilitated via \code{\link[Smisc:pddply]{Smisc::pddply}},
+##' a wrapper for parallelized calls to \code{\link[plyr:ddply]{plyr::ddply}}.
+##'
 ##' @export
 ##'
 ##' @inheritParams check_getFeatures_args
@@ -91,95 +88,12 @@ ddply_getFeatures <- function(y, .variables, cont = NULL, disc = NULL, centerSca
   # Parallel processing
   if (nJobs > 1) {
 
-    # Load the requisite namespaces
-    loadNamespace("parallel")
+    return(Smisc::pddply(y$y, .variables, getFeaturesW, allArgs = allArgs,
+                         njobs = nJobs, .paropts = list(.packages = "qFeature")))
 
-    willStop <- FALSE
-    
-    if (!requireNamespace("doParallel", quietly = TRUE)) {
-      willStop <- TRUE
-    }
-    if (!requireNamespace("foreach", quietly = TRUE)) {
-      willStop <- TRUE
-    }
-
-    if (willStop) {
-      stop("The 'doParallel' and 'foreach' packages must be installed for ",
-           "parallel processing")
-    }
-
-    # Set up the cluster  
-    cl <- parallel::makeCluster(nJobs)
-    parallel::clusterEvalQ(cl, library(qFeature))
-    doParallel::registerDoParallel(cl)
-
-    # The warning collection is needed due to an outstanding (and innocuous) issue with
-    # plyr that only occurs when the function is called in parallel.
-    # See https://github.com/hadley/plyr/issues/203
-    o <- tryCatchWE(plyr::ddply(y$y, .variables, getFeaturesW, allArgs = allArgs, .parallel = TRUE))
-
-    # Shut down the cluster
-    parallel::stopCluster(cl)
-    
-    # If we have an error, then stop
-    if (is(o$value, "error")) {
-      stop(o$value)
-    }
-    
-    # Extract and remove bogus warnings from the plyr package
-    if (!is.null(o$warning)) {
-
-      # Seemingly unique strings from the bogus warning
-      bogus1 <- c("<anonymous>: ... may be used in an incorrect context:")
-      bogus2 <- c(".fun(piece, ...)")
-
-      # Determine whether these strings are present in any warnings
-      vWarn <- function(x) {
-        return(!(grepl(bogus1, x, fixed = TRUE) & grepl(bogus2, x, fixed = TRUE)))
-      }
-
-      # Identify the valid warnings
-      validWarnings <- unlist(lapply(o$warning, vWarn))
-
-      # Retain valid warnings
-      o$warning <- o$warning[validWarnings]
-
-      # If there any warnings left, issue them
-      if (length(o$warning)) {
-        nothing <- lapply(o$warning, warning)
-      }
-      
-    } # If there are warning messages
-
-    # Extract the computed features
-    o <- o$value
-
-  } # If we're processing in parallel
-
-  # Non-parallel processing
-  else {
-
-    o <- plyr::ddply(y$y, .variables, getFeaturesW, allArgs = allArgs)
-      
   }
-
-  return(o)
+  
+  # Non-parallel processing
+  return(plyr::ddply(y$y, .variables, getFeaturesW, allArgs = allArgs))
   
 } # ddply_getFeatures
-
-# I got this idea from demo(error.catching).  This actually trapped the warnings,
-# whereas suppressWarnings() made them vanish completely
-tryCatchWE <- function(expr) {
-    
-  W <- NULL
-
-  w.handler <- function(w) { 
- 	  W <<- c(W, w = list(w))
-   	invokeRestart("muffleWarning")
-  } 
-
-  return(list(value = withCallingHandlers(tryCatch(expr, error = function(e) e),
- 			                                    warning = w.handler),
-              warning = W))
-  
-} # tryCatchWE

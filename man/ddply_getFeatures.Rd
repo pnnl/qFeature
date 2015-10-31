@@ -61,11 +61,8 @@ case all the subsequent arguments to \code{getFeature} are ignored
 (because the \code{valid_getFeatures_args} object contains all those arguments).
 
 Parallel processing,
-if requested via \code{nJobs > 1}, is facilitated via the
-\code{.parallel} argument of \code{\link[plyr:ddply]{plyr::ddply}}, which in turn
-relies on \code{\link[foreach:foreach]{foreach::foreach}},
-\code{\link[doParallel:registerDoParallel]{doParallel::registerDoParallel}}, and various functions
-from the \pkg{parallel} package.
+if requested via \code{nJobs > 1}, is facilitated via \code{\link[Smisc:pddply]{Smisc::pddply}},
+a wrapper for parallelized calls to \code{\link[plyr:ddply]{plyr::ddply}}.
 }
 \examples{
 # Load the data

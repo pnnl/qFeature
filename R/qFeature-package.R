@@ -7,8 +7,8 @@
 ##' \tabular{ll}{
 ##' Package: \tab qFeature\cr
 ##' Type: \tab Package\cr
-##' Version: \tab 0.1.6\cr
-##' Date: \tab 2015-09-29\cr
+##' Version: \tab 0.1.7\cr
+##' Date: \tab 2015-10-30\cr
 ##' License: \tab file LICENSE\cr }
 ##' 
 ##' @name qFeature-package

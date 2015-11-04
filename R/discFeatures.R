@@ -14,7 +14,6 @@
 ##' between states
 ##' 
 ##' @export
-##' 
 ##' @param y A vector with discrete states
 ##' 
 ##' @return A named vector with the fraction of time spent in each state, and the

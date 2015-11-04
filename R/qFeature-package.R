@@ -8,7 +8,7 @@
 ##' Package: \tab qFeature\cr
 ##' Type: \tab Package\cr
 ##' Version: \tab 0.1.7\cr
-##' Date: \tab 2015-10-30\cr
+##' Date: \tab 2015-11-04\cr
 ##' License: \tab file LICENSE\cr }
 ##' 
 ##' @name qFeature-package
@@ -25,8 +25,7 @@
 ##' @keywords package
 ##'
 ##' @examples
-##' \dontrun{
 ##' help(package = qFeature)
-##' browseVignettes("qFeature")
-##' }
+##' \dontrun{browseVignettes("qFeature")}
+##' 
 NULL

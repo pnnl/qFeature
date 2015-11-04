@@ -7,8 +7,6 @@ env:
 
 r_binary_packages:
   - moments
-  - foreach
-  - doParallel
   - testthat
   - knitr
   - plyr
@@ -29,5 +27,6 @@ notifications:
   email:
     recipients:
     - lucas.tate@pnnl.gov
+    - landon.sego@pnnl.gov
     on_success: change
     on_failure: change

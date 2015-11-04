@@ -8,7 +8,6 @@
 ##' the same arguments.
 ##'
 ##' @export
-##' 
 ##' @param y Data frame, each row containing a vector of measurements for a particular point in time,
 ##' with columns indicating the discrete and/or continuous measured variables (and possibly other
 ##' descriptive variables).  The data processed presuming the rows are orderd chronologically.

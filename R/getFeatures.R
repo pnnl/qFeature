@@ -14,7 +14,6 @@
 ##' in \code{\link{ddply_getFeatures}}.
 ##' 
 ##' @export
-##'
 ##' @inheritParams check_getFeatures_args
 ##'
 ##' @return A named vector containing the features for each of the variables

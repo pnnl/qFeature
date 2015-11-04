@@ -24,7 +24,6 @@
 ##' are requested.
 ##' 
 ##' @export
-##' 
 ##' @param stats A character vector of summary statistics.  See details for acceptable
 ##' values.
 ##'

@@ -16,7 +16,6 @@
 ##' a wrapper for parallelized calls to \code{\link[plyr:ddply]{plyr::ddply}}.
 ##'
 ##' @export
-##'
 ##' @inheritParams check_getFeatures_args
 ##' 
 ##' @param .variables character vector with variable names in \code{y} that will

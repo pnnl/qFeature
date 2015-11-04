@@ -6,7 +6,7 @@
 ##' \code{\link{summaryStats}}.
 ##  but exported only for convenience.
 ##'
-## @export sp.min sp.max sp.sum sp.count 
+# @export sp.min sp.max sp.sum sp.count 
 ##' @rdname utility_functions
 ##' @aliases sp.min sp.max sp.sum sp.count sp.mean sp.skewness sp.kurtosis
 ##'

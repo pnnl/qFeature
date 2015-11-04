@@ -17,7 +17,6 @@
 ##' each of the possible transitions among the unique states of \code{y}.
 ##'
 ##' @export
-##' 
 ##' @param y The integer vector whose state transitions will be identified
 ##' 
 ##' @param y.unique An integer vector containing the unique values of \code{y}

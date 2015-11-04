@@ -49,7 +49,6 @@
 ##' argument values.
 ##' 
 ##' @export
-##'
 ##' @param y A numeric vector
 ##' 
 ##' @inheritParams check_fitQ_args

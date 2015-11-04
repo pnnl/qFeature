@@ -1,9 +1,10 @@
-Version 0.1.7, 2015-10-30
+Version 0.1.7, 2015-11-04
 -----------------------------------------------------------------------------------
 
 FEATURES / CHANGES
 
 - Simplified `ddply_getFeatures()` by calling the newly created `Smisc::pddply()`
+- Minor edits to vignette
 
 
 Version 0.1.6, 2015-09-29

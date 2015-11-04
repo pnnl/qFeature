@@ -61,7 +61,7 @@ test_that("ddply_getFeatures() output has not changed from the archived output f
 test_that("ddply_getFeatures() output is the same whether we use parallel or non-parallel processing", {
 
  # Calculate using the demo data
- data(demoData)
+ data(demoData, package = "qFeature")
 
  # In parallel
  f1 <- ddply_getFeatures(demoData, c("subject", "phase"),

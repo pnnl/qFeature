@@ -12,7 +12,6 @@
 ##' \code{y.unique} may contain values that are not in \code{y}.
 ##'
 ##' @export
-##' 
 ##' @param y An integer vector
 ##' 
 ##' @param y.unique The unique values of \code{y} whose occurence in \code{y}

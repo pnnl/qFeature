@@ -10,7 +10,7 @@
 
 <meta name="author" content="Lucas Tate, Landon Sego, Ryan Butner" />
 
-<meta name="date" content="2015-10-30" />
+<meta name="date" content="2015-11-04" />
 
 <title>qFeature</title>
 
@@ -72,7 +72,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="header">
 <h1 class="title">qFeature</h1>
 <h4 class="author"><em>Lucas Tate, Landon Sego, Ryan Butner</em></h4>
-<h4 class="date"><em>2015-10-30</em></h4>
+<h4 class="date"><em>2015-11-04</em></h4>
 </div>
 
 
@@ -401,7 +401,8 @@ outGetFeatures</code></pre></div>
 <h3>ddply_getFeatures()</h3>
 <div id="description-4" class="section level4">
 <h4>Description</h4>
-<p>The <code>ddply_getFeatures()</code> function is simply a wrapper that allows the <code>getFeatures()</code> function to be implemented for each “group” in a data frame, where the groups are defined by the unique combinations of the values of one or more categorical variables. The replication of <code>getFeatures()</code> for each group is carried out by <code>ddply()</code> from the <code>plyr</code> package.</p>
+<p>The <code>ddply_getFeatures()</code> function is simply a wrapper that allows the <code>getFeatures()</code> function to be implemented for each “group” in a data frame, where the groups are defined by the unique combinations<br />
+of the values of one or more categorical variables. The replication of <code>getFeatures()</code> for each group is carried out by <code>ddply()</code> from the <code>plyr</code> package.</p>
 <p>The importance of this wrapper is that it facilitates processing unique subsets in the data and allows for parallel processing.</p>
 </div>
 <div id="how-to-use-ddply_getfeatures" class="section level4">
@@ -539,7 +540,8 @@ outGetFeatures</code></pre></div>
 <h2>References</h2>
 <ul>
 <li><p>Amidan BG, Ferryman TA. 2005. “Atypical Event and Typical Pattern Detection within Complex Systems.” IEEE Aerospace Conference Proceedings, March 2005.</p></li>
-<li><p>A mathematical description of the algorithms in <code>fitQ</code> and <code>discFeatures</code> is given in this file: <strong>Explanation_of_qFeature_algorithms.pdf</strong>, whose location you can find with following command in R:</p></li>
+<li><p>A mathematical description of the algorithms in <code>fitQ</code> and <code>discFeatures</code> is available <a href="https://github.com/pnnl/qFeature/blob/master/inst/doc/Explanation_of_qFeature_algorithms.pdf">here</a>.<br />
+Alternatively, after installing the <code>qFeature</code> package, the description is available locally, and this R command will show you where it is located:</p></li>
 </ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">file.path</span>(<span class="kw">path.package</span>(<span class="st">&quot;qFeature&quot;</span>), <span class="st">&quot;doc&quot;</span>, <span class="st">&quot;Explanation_of_qFeature_algorithms.pdf&quot;</span>)</code></pre></div>
 </div>

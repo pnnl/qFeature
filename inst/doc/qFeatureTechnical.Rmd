@@ -75,13 +75,15 @@ percentage of time spent at each of those states as well as counting the transit
 from one state to another.
 
 ####How to use discFeatures()
-Using `discFeatures()` is most easily demonstrated with a simple example. Let's begin by creating a small dataset with 2 discrete states (TRUE/FALSE).
+Using `discFeatures()` is most easily demonstrated with a simple example. Let's begin by creating a small dataset 
+with 2 discrete states (TRUE/FALSE).
 ```{r}
 discData <- c("TRUE", "FALSE", "FALSE", NA, "TRUE", "TRUE", NA, NA, "TRUE", "FALSE", "TRUE", "FALSE", "TRUE")
 discData
 ```
 Now we have a small data set of length 13 that contains two discrete phases (also called "grouping 
-variables") and 3 missing values stored as NA. Now if we apply the `discFeatures()` function to our dataset we can see what happens.
+variables") and 3 missing values stored as NA. Now if we apply the `discFeatures()` function to our dataset 
+we can see what happens.
 ```{r}
 discFeatures(discData)
 ```
@@ -156,7 +158,8 @@ fitqDataEx1 <- rnorm(7, 5, 1)
 fitqDataEx1
 ```
 
-We now have a small vector of length 7 containing randomly generated numbers. Now we can pass the vector into our `fitQ()` function and take a look at the output.
+We now have a small vector of length 7 containing randomly generated numbers. Now we can pass the vector 
+into our `fitQ()` function and take a look at the output.
 
 ```{r}
 fitQ(y = fitqDataEx1, x1 = -3:3, min.window = 4)
@@ -188,7 +191,8 @@ As you can see (aside from rounding):
 * Residual standard error is equal to the second value of __d__
 
 
-Hopefully the first example helps to solidify how the feature extraction is being populated. Let's continue by taking a look at a few issues you might encounter.
+Hopefully the first example helps to solidify how the feature extraction is being populated. Let's continue by 
+taking a look at a few issues you might encounter.
 
 #####Example 2
 
@@ -346,7 +350,8 @@ state to another.
 
 ####Description
 The `ddply_getFeatures()` function is simply a wrapper that allows the `getFeatures()` function to be 
-implemented for each "group" in a data frame, where the groups are defined by the unique combinations  of the values of one or more categorical variables.  The replication of `getFeatures()` for each group
+implemented for each "group" in a data frame, where the groups are defined by the unique combinations  
+of the values of one or more categorical variables.  The replication of `getFeatures()` for each group
 is carried out by `ddply()` from the `plyr` package. 
 
 The importance of this wrapper is that it facilitates processing unique subsets in the data and 
@@ -408,8 +413,10 @@ multivariate statistical techniques like dimensionality reduction, clustering, a
 * Amidan BG, Ferryman TA. 2005. “Atypical Event and Typical Pattern Detection within Complex
  Systems.” IEEE Aerospace Conference Proceedings, March 2005.
 
-* A mathematical description of the algorithms in `fitQ` and `discFeatures` is given in this file:
-**Explanation_of_qFeature_algorithms.pdf**, whose location you can find with following command in R:
+* A mathematical description of the algorithms in `fitQ` and `discFeatures` is available
+[here](https://github.com/pnnl/qFeature/blob/master/inst/doc/Explanation_of_qFeature_algorithms.pdf).  
+Alternatively, after installing the `qFeature` package, the description is available locally,
+and this R command will show you where it is located:
 ```{r, eval = FALSE}
 file.path(path.package("qFeature"), "doc", "Explanation_of_qFeature_algorithms.pdf")
 ```
